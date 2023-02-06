@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.listit.listit.domain.dto.AnimeRecord;
 import br.com.listit.listit.domain.dto.ImageJPG;
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
+
 import net.sandrohc.jikan.model.anime.Anime;
 
 @Service
@@ -37,7 +38,6 @@ public class AnimeServiceImpl implements AnimeService {
 				.imageJPG(imageJpgConverted)
 				.synopsis(anime.getSynopsis())
 				.build();
-				
 	}
 	
 	private ImageJPG convertImageJPGToImageEntity(net.sandrohc.jikan.model.common.Image jpg) {
@@ -47,8 +47,7 @@ public class AnimeServiceImpl implements AnimeService {
 			.largeImageURL(jpg.largeImageUrl)
 			.build();
 		
-		return image;
-				
+		return image;	
 	}
 
 }
