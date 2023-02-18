@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.listit.listit.exception.ListAnimeNotFoundException;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
 import lombok.Builder;
@@ -34,8 +35,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 	
+
+	@ExceptionHandler(ListAnimeNotFoundException.class)
+    public ResponseEntity<BadRequestExceptionDetails> listAnimeNotException(ListAnimeNotFoundException badRequestException){
+    
+        return new ResponseEntity<>(
+                BadRequestExceptionDetails.builder()
+                .timeStamps(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .title("Not found Exception, try again")
+                .details(badRequestException.getMessage())
+                .developerMessge(badRequestException.getClass().getName())
+                .build(), HttpStatus.BAD_REQUEST
+        );
+    }
+
 	@ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<BadRequestExceptionDetails> userNotFoundException(UserNotFoundException badRequestException){
+
         return new ResponseEntity<>(
                 BadRequestExceptionDetails.builder()
                 .timeStamps(LocalDateTime.now())
@@ -47,7 +64,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 	
-    @Override
+  @Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
 			HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
     	return new ResponseEntity<>(

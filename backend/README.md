@@ -1,0 +1,23 @@
+
+
+```yaml
+version: '3.1'
+
+services:
+
+  database:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: listit
+      POSTGRES_PASSWORD: qwe123
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8000:8080
+
+```
