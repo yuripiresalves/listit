@@ -24,7 +24,7 @@ public class AnimeServiceImpl implements AnimeService {
 		
 		return convertAnimeToAnimeRecordEntity(searchById);
 	}
-	
+
 	private AnimeRecord convertAnimeToAnimeRecordEntity(Anime anime) {
 		ImageJPG imageJpgConverted = convertImageJPGToImageEntity(anime.getImages().jpg);
 		
@@ -46,8 +46,7 @@ public class AnimeServiceImpl implements AnimeService {
 			.smallImageURL(jpg.smallImageUrl)
 			.largeImageURL(jpg.largeImageUrl)
 			.build();
-		
-		return image;	
+		return image;
 	}
 
 }
