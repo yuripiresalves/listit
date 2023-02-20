@@ -19,6 +19,12 @@ public class AnimeServiceImpl implements AnimeService {
 	private ClientRemoteApiJikan clientRemoteApiJikan;
 
 	@Override
+	public List<AnimeRecord> findAnimeByTitle(String title) {
+		List<Anime> searchByName = clientRemoteApiJikan.searchByName(title);
+		List<AnimeRecord> animeRecordList = searchByName.stream().map(s -> convertAnimeToAnimeRecordEntity(s)).collect(Collectors.toList());
+		return animeRecordList;
+	}
+	
 	public AnimeRecord findAnimeByID(int id) {
 		Anime searchById = clientRemoteApiJikan.searchById(id);
 		
