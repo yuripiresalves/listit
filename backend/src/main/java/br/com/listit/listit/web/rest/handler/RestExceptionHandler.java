@@ -34,7 +34,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build(), HttpStatus.BAD_REQUEST
         );
     }
-	
+
 
 	@ExceptionHandler(ListAnimeNotFoundException.class)
     public ResponseEntity<BadRequestExceptionDetails> listAnimeNotException(ListAnimeNotFoundException badRequestException){
