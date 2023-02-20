@@ -24,6 +24,12 @@ public class AnimeServiceImpl implements AnimeService {
 		return animeRecordList;
 	}
 	
+	public AnimeRecord findAnimeByID(int id) {
+		Anime searchById = clientRemoteApiJikan.searchById(id);
+		
+		return convertAnimeToAnimeRecordEntity(searchById);
+	}
+
 	private AnimeRecord convertAnimeToAnimeRecordEntity(Anime anime) {
 		ImageJPG imageJpgConverted = convertImageJPGToImageEntity(anime.getImages().jpg);
 		
