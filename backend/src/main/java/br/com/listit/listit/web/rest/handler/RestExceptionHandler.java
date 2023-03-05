@@ -13,6 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.listit.listit.exception.BadCredentialsCustomException;
 import br.com.listit.listit.exception.ListAnimeNotFoundException;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
@@ -21,71 +22,63 @@ import lombok.Data;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-	
+
 	@ExceptionHandler(BadRequestClientServiceException.class)
-    public ResponseEntity<BadRequestExceptionDetails> badRequestClientServiceException(BadRequestClientServiceException badRequestException){
-        return new ResponseEntity<>(
-                BadRequestExceptionDetails.builder()
-                .timeStamps(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .title("Bad Request Exception, try again")
-                .details(badRequestException.getMessage())
-                .developerMessge(badRequestException.getClass().getName())
-                .build(), HttpStatus.BAD_REQUEST
-        );
-    }
+	public ResponseEntity<BadRequestExceptionDetails> badRequestClientServiceException(
+			BadRequestClientServiceException badRequestException) {
+		return new ResponseEntity<>(BadRequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
+				.status(HttpStatus.BAD_REQUEST.value()).title("Bad Request Exception, try again")
+				.details(badRequestException.getMessage()).developerMessge(badRequestException.getClass().getName())
+				.build(), HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(ListAnimeNotFoundException.class)
-    public ResponseEntity<BadRequestExceptionDetails> listAnimeNotException(ListAnimeNotFoundException badRequestException){
-    
-        return new ResponseEntity<>(
-                BadRequestExceptionDetails.builder()
-                .timeStamps(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .title("Not found Exception, try again")
-                .details(badRequestException.getMessage())
-                .developerMessge(badRequestException.getClass().getName())
-                .build(), HttpStatus.BAD_REQUEST
-        );
-    }
+	public ResponseEntity<BadRequestExceptionDetails> listAnimeNotException(
+			ListAnimeNotFoundException badRequestException) {
+
+		return new ResponseEntity<>(BadRequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
+				.status(HttpStatus.NOT_FOUND.value()).title("Not found Exception, try again")
+				.details(badRequestException.getMessage()).developerMessge(badRequestException.getClass().getName())
+				.build(), HttpStatus.BAD_REQUEST);
+	}
 
 	@ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<BadRequestExceptionDetails> userNotFoundException(UserNotFoundException badRequestException){
+	public ResponseEntity<BadRequestExceptionDetails> userNotFoundException(UserNotFoundException badRequestException) {
 
-        return new ResponseEntity<>(
-                BadRequestExceptionDetails.builder()
-                .timeStamps(LocalDateTime.now())
-                .status(HttpStatus.NOT_FOUND.value())
-                .title("Not found Exception, try again")
-                .details(badRequestException.getMessage())
-                .developerMessge(badRequestException.getClass().getName())
-                .build(), HttpStatus.BAD_REQUEST
-        );
-    }
+		return new ResponseEntity<>(BadRequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
+				.status(HttpStatus.NOT_FOUND.value()).title("Not found Exception, try again")
+				.details(badRequestException.getMessage()).developerMessge(badRequestException.getClass().getName())
+				.build(), HttpStatus.BAD_REQUEST);
+	}
 	
-  @Override
-	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
-			HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-    	return new ResponseEntity<>(
-                BadRequestExceptionDetails.builder()
-                .timeStamps(LocalDateTime.now())
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .title("Error Internal")
-                .details(ex.getMessage())
-                .developerMessge(ex.getClass().getName())
-                .build(), HttpStatus.INTERNAL_SERVER_ERROR
-        );
+	@ExceptionHandler(BadCredentialsCustomException.class)
+	public ResponseEntity<BadRequestExceptionDetails> userNotFoundException(BadCredentialsCustomException badRequestException) {
+
+		return new ResponseEntity<>(BadRequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
+				.status(HttpStatus.UNAUTHORIZED.value()).title("Bad Credentials, try again")
+				.details(badRequestException.getMessage()).developerMessge(badRequestException.getClass().getName())
+				.build(), HttpStatus.UNAUTHORIZED);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+			HttpStatusCode statusCode, WebRequest request) {
+		return new ResponseEntity<>(
+				BadRequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
+						.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).title("Error Internal")
+						.details(ex.getMessage()).developerMessge(ex.getClass().getName()).build(),
+				HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@Builder
 	@Data
-	private static class BadRequestExceptionDetails{
-	    protected String title;
-	    protected int status;
-	    protected String details;
-	    protected String developerMessge;
-	    @JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
-	    protected LocalDateTime timeStamps;
+	private static class BadRequestExceptionDetails {
+		protected String title;
+		protected int status;
+		protected String details;
+		protected String developerMessge;
+		@JsonFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
+		protected LocalDateTime timeStamps;
 
 	}
 

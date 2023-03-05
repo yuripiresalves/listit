@@ -1,5 +1,7 @@
 
 spring:
+  main:
+    allow-circular-references: true
   application:
     name: listit
   datasource:
@@ -18,13 +20,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
- # security:
- #   oauth2:
- #     client:
- #       registration:
- #         github:
- #           client-id: https://github.com/apps/listit-uem-cs
- #            client-secret: 48cd361bf16f6c07a17f0dd4b25c26d8517e6e83
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 704860870912-vb898r09koc1a10mvs9bbsic0cs3soac.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
   server:
     port: 8080
 logging:
@@ -38,4 +43,10 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /api-docs
+    
+jwt:
+  secret: bXktMzItY2hhcmFjdGVyLXVsdHJhLXNlY3VyZS1hbmQtdWx0cmEtbG9uZy1zZWNyZXQ=
+  validate: 1800
+
+
 

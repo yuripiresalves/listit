@@ -6,13 +6,13 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
-import br.com.listit.listit.domain.dto.ListAnimeDTO;
 import br.com.listit.listit.domain.entity.ItemAnimeEntity;
 import br.com.listit.listit.domain.entity.ListAnimeEntity;
 import br.com.listit.listit.domain.entity.TypeList;
 import br.com.listit.listit.exception.ListAnimeNotFoundException;
 import br.com.listit.listit.repository.ListAnimeEntityRepository;
+import br.com.listit.listit.web.dto.AnimeRecord;
+import br.com.listit.listit.web.dto.ListAnimeDTO;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -26,7 +26,7 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	public ListAnimeDTO createList(TypeList typeList) {
 		ListAnimeEntity listAnime = ListAnimeEntity.builder()
 		.type(typeList)
-		.items(new ArrayList())
+		.items(new ArrayList<ItemAnimeEntity>())
 		.build();
 		
 		ListAnimeEntity save = listAnimeEntityRepository.save(listAnime);

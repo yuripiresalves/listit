@@ -1,4 +1,4 @@
-package br.com.listit.listit.domain.dto;
+package br.com.listit.listit.web.dto;
 
 import java.util.List;
 

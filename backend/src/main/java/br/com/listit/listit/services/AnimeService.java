@@ -2,7 +2,8 @@ package br.com.listit.listit.services;
 
 
 import java.util.List;
-import br.com.listit.listit.domain.dto.AnimeRecord;
+
+import br.com.listit.listit.web.dto.AnimeRecord;
 
 
 public interface AnimeService {

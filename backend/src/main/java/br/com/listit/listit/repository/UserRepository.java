@@ -12,4 +12,6 @@ import br.com.listit.listit.domain.entity.User;
 public interface UserRepository extends JpaRepository<User, Integer>  {
 	@Query("SELECT u FROM User u WHERE u.username = :username and u.password = :password")
 	Optional<User> findByUsernameAndPassword(String username, String password);
+	
+	Optional<User> findByUsername(String username);
 }
