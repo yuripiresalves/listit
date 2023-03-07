@@ -1,7 +1,7 @@
 package br.com.listit.listit.services;
 
-import br.com.listit.listit.domain.dto.ListAnimeDTO;
 import br.com.listit.listit.domain.entity.TypeList;
+import br.com.listit.listit.web.dto.ListAnimeDTO;
 
 public interface ListAnimeEntityService {
 	

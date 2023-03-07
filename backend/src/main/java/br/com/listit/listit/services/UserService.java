@@ -1,6 +1,6 @@
 package br.com.listit.listit.services;
 
-import br.com.listit.listit.domain.dto.UserDTO;
+import br.com.listit.listit.web.dto.UserDTO;
 
 public interface UserService {
 	

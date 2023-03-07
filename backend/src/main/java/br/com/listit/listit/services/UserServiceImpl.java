@@ -2,12 +2,13 @@ package br.com.listit.listit.services;
 
 import java.util.Optional;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.listit.listit.domain.dto.UserDTO;
 import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
+import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -15,11 +16,14 @@ import lombok.AllArgsConstructor;
 public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserDTO createUser(UserDTO userDTO) {
 		User convertUSerDtoToUserEntity = convertUSerDtoToUserEntity(userDTO);
 
+		convertUSerDtoToUserEntity.setPassword(passwordEncoder.encode(convertUSerDtoToUserEntity.getPassword()));
+		
 		User user = userRepository.save(convertUSerDtoToUserEntity);
 		return convertUserEntityToUSerDto(user);
 	}

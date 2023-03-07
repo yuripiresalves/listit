@@ -4,6 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.com.listit.listit.services.remote.jikan.JikanSimpleFactory;
+import br.com.listit.listit.web.security.token.TokenUtil;
 
 @SpringBootApplication
 public class ListitApplication {

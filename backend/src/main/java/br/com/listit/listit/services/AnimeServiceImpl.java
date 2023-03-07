@@ -6,16 +6,16 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
-import br.com.listit.listit.domain.dto.ImageJPG;
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
-
+import br.com.listit.listit.web.dto.AnimeRecord;
+import br.com.listit.listit.web.dto.ImageJPG;
+import lombok.AllArgsConstructor;
 import net.sandrohc.jikan.model.anime.Anime;
 
 @Service
+@AllArgsConstructor
 public class AnimeServiceImpl implements AnimeService {
 	
-	@Autowired
 	private ClientRemoteApiJikan clientRemoteApiJikan;
 
 	@Override
