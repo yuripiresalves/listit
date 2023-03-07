@@ -32,6 +32,7 @@ public class ClientRemoteApiJikan {
 	public Anime searchById(int id) {
 		Jikan jikan = JikanSimpleFactory.createJikan();
 		Anime anime = new Anime();
+		
 		try {
 			anime = jikan.query().anime().get(id).execute().block(Duration.ofMillis(5000));
 

@@ -11,6 +11,10 @@ import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -36,6 +40,16 @@ public class UserServiceImpl implements UserService {
 			throw new UserNotFoundException("username or password are incorrect");
 		});
 		return convertUserEntityToUSerDto(user);
+
+	}
+	
+	@Override
+	public Optional<User> getUserCurrent() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+		
+		return userRepository.findByUsername(userDetails.getUsername());
 
 	}
 
