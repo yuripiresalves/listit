@@ -3,6 +3,7 @@ package br.com.listit.listit.web.rest.api.v1;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api/lists")
 @Tag(name = "list", description = "manager lists")
 @EnableMethodSecurity(prePostEnabled = true)
