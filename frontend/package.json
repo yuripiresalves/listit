@@ -14,6 +14,7 @@
     "@types/node": "18.11.18",
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
+    "axios": "^1.3.4",
     "next": "13.1.6",
     "phosphor": "^0.7.1",
     "phosphor-react": "^1.4.1",

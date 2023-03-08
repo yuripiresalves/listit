@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-// import AppPreviewImg from '../../public/appMockup.png';
+import AppPreviewImg from '../../public/appMockup.png';
 import { Logo } from './Logo';
 
 export function AsideBanner() {
@@ -11,14 +11,14 @@ export function AsideBanner() {
         <p className="text-center my-6">
           Organize seus animes preferidos em listas
         </p>
-        {/* <Image
+        <Image
           src={AppPreviewImg}
           alt="Imagem mostrando o app Listit em um celular, notebook e tablet"
-          width={320}
+          width={600}
           priority
           quality={100}
-          className="2xl:mt-10 2xl:w-full"
-        /> */}
+          className=" 2xl:w-full"
+        />
       </main>
       <footer>
         <span>© Todos os direitos reservados.</span>
