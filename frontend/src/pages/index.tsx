@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import { FormEvent, useState } from 'react';
+import { api } from '@/services/api';
+import { MagnifyingGlass, X } from 'phosphor-react';
+import * as Tabs from '@radix-ui/react-tabs';
 
+import { Header } from '@/components/Header';
 import { GridContainer } from '@/components/GridContainer';
 import { AnimeCard } from '@/components/AnimeCard';
 import { Table } from '@/components/Table';
-import * as Tabs from '@radix-ui/react-tabs';
-import { api } from '@/services/api';
-import { MagnifyingGlass, X } from 'phosphor-react';
 import { Loading } from '@/components/Loading';
 import { AnimeNotFound } from '@/components/AnimeNotFound';
 
@@ -59,6 +60,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
+      <Header />
+
       <section className="bg-emerald-800 2xl:h-96 h-64 flex items-center justify-center px-4">
         <div className="max-w-[512px] flex flex-col items-center justify-center">
           <p className="text-zinc-300 mb-6 w-full text-center font-bold ">
