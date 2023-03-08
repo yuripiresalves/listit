@@ -35,7 +35,7 @@ export default function AnimeDetails() {
       try {
         setHasError(false);
         setIsLoading(true);
-        const response = await api.get(`/findById/${id}`);
+        const response = await api.get(`/animes/findById/${id}`);
         const data = await response.data;
         setAnime(data);
       } catch (error) {

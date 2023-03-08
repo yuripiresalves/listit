@@ -37,7 +37,7 @@ export default function Home() {
     try {
       setHasError(false);
       setIsLoading(true);
-      const response = await api.get(`/findByName/${animeName}`);
+      const response = await api.get(`/animes/findByName/${animeName}`);
       const data = await response.data;
       setAnimes(data);
     } catch (error) {
