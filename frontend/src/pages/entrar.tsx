@@ -1,14 +1,18 @@
 import { AuthContext } from '@/contexts/AuthContext';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { GoogleLogo } from 'phosphor-react';
-import { FormEvent, useContext } from 'react';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
+  const { signIn, user } = useContext(AuthContext);
+  const router = useRouter();
+
+  if (user) router.push('/');
 
   async function handleSignIn(data) {
     await signIn(data);

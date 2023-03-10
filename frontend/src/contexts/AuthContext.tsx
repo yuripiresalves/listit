@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 type User = {
   name: string;
   email: string;
+  username: string;
   avatar_url: string;
 };
 
@@ -34,13 +35,11 @@ export function AuthProvider({ children }: any) {
       password,
     });
 
-    console.log(data);
-
     setCookie(undefined, 'listit.token', data.token, {
       maxAge: 60 * 60 * 1, // 1 hour
     });
 
-    setUser(data.user);
+    setUser(data.userDTO);
     router.push('/');
   }
 

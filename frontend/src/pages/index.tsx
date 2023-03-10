@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { api } from '@/services/api';
 import { MagnifyingGlass, X } from 'phosphor-react';
 import * as Tabs from '@radix-ui/react-tabs';
@@ -10,6 +10,7 @@ import { AnimeCard } from '@/components/AnimeCard';
 import { Table } from '@/components/Table';
 import { Loading } from '@/components/Loading';
 import { AnimeNotFound } from '@/components/AnimeNotFound';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export type Anime = {
   id: number;
@@ -27,6 +28,7 @@ export default function Home() {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const { user } = useContext(AuthContext);
 
   async function handleSearchAnime(event: FormEvent) {
     event.preventDefault();
@@ -117,7 +119,7 @@ export default function Home() {
               ))}
             </div>
           </GridContainer>
-        ) : (
+        ) : user ? (
           <GridContainer>
             <h2 className="text-2xl font-bold text-emerald-700 mb-8">
               Minhas listas
@@ -191,6 +193,15 @@ export default function Home() {
                 <Table />
               </Tabs.Content>
             </Tabs.Root>
+          </GridContainer>
+        ) : (
+          <GridContainer>
+            <h2 className="text-2xl font-bold text-emerald-700 mb-8">
+              Minhas listas
+            </h2>
+            <p className="text-zinc-500">
+              Você precisa estar logado para ver suas listas
+            </p>
           </GridContainer>
         )}
       </section>
