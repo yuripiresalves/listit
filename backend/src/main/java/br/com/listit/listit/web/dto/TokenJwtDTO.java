@@ -18,4 +18,6 @@ public class TokenJwtDTO {
 
     @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
 	private LocalDateTime expire;
+    
+    private UserDTO userDTO;
 }
