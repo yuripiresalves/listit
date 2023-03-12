@@ -13,9 +13,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import br.com.listit.listit.domain.entity.AcessoUser;
+import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.BadCredentialsCustomException;
 import br.com.listit.listit.exception.UserDisabledException;
 import br.com.listit.listit.web.dto.TokenJwtDTO;
+import br.com.listit.listit.web.dto.UserDTO;
 import br.com.listit.listit.web.security.token.TokenUtil;
 import lombok.AllArgsConstructor;
 
@@ -41,8 +44,10 @@ public class AcessoServiceImpl implements AcessoService {
 		String generateToken = generateToken(userDetails);
 
 		Date expirationDateFromToken = tokenUtil.getExpirationDateFromToken(generateToken);
+		
+		UserDTO userDtoCurrent = extractUserDtoFromUserDetails(userDetails);
 
-		TokenJwtDTO token = TokenJwtDTO.builder().token(generateToken).expire(convertToLocalDateTimeViaInstant(expirationDateFromToken))
+		TokenJwtDTO token = TokenJwtDTO.builder().token(generateToken).expire(convertToLocalDateTimeViaInstant(expirationDateFromToken)).userDTO(userDtoCurrent)
 				.build();
 
 		return token;
@@ -62,6 +67,15 @@ public class AcessoServiceImpl implements AcessoService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		return userDetailsServiceImpl.loadUserByUsername(username);
+	}
+	
+	public UserDTO extractUserDtoFromUserDetails(UserDetails userDetails) {
+		AcessoUser acessoUser = (AcessoUser) userDetails;
+		return convertUserEntityToUSerDto(acessoUser.getUser());
+	}
+	
+	private UserDTO convertUserEntityToUSerDto(User user) {
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).build();
 	}
 
 	@Override
