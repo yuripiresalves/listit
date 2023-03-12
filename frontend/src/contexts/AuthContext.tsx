@@ -1,6 +1,6 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { api } from '@/services/api';
-import { setCookie } from 'nookies';
+import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 
 type User = {
@@ -19,6 +19,7 @@ type AuthContextType = {
   isAuthenticaded: boolean;
   user: User | null;
   signIn: (credentials: SignInCredentials) => Promise<void>;
+  signOut: () => void;
 };
 
 export const AuthContext = createContext({} as AuthContextType);
@@ -28,6 +29,23 @@ export function AuthProvider({ children }: any) {
   const router = useRouter();
 
   const isAuthenticaded = !!user;
+
+  useEffect(() => {
+    const { 'listit.token': token } = parseCookies();
+
+    if (token) {
+      api
+        .get('/authenticate/verify')
+        .then((response) => {
+          const { userDTO } = response.data;
+
+          setUser(userDTO);
+        })
+        .catch(() => {
+          signOut();
+        });
+    }
+  }, []);
 
   async function signIn({ email, password }: SignInCredentials) {
     const { data } = await api.post('/authenticate/login', {
@@ -43,8 +61,15 @@ export function AuthProvider({ children }: any) {
     router.push('/');
   }
 
+  function signOut() {
+    setUser(null);
+    setCookie(undefined, 'listit.token', '', {
+      maxAge: -1,
+    });
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticaded, signIn }}>
+    <AuthContext.Provider value={{ user, isAuthenticaded, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );

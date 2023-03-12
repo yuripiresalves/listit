@@ -4,6 +4,9 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { GridContainer } from '../components/GridContainer';
 import { Header } from '../components/Header';
 import { AnimeCard } from '../components/AnimeCard';
+import { useContext } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 export default function MyProfile() {
   const animes = [
@@ -30,6 +33,10 @@ export default function MyProfile() {
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
     },
   ];
+  const router = useRouter();
+  const { user } = useContext(AuthContext);
+
+  if (!user) router.push('/');
 
   return (
     <>
@@ -49,9 +56,9 @@ export default function MyProfile() {
             <img src="https://github.com/yuripiresalves.png" />
           </div>
           <div className="pt-16 md:pt-20 text-center w-full border-b border-zinc-200 p-4">
-            <h1 className="text-2xl font-bold">Yuri Alves</h1>
+            <h1 className="text-2xl font-bold">{user?.name}</h1>
             <p className="text-gray-500">
-              <span className="text-gray-400 text-sm">@yuripiresalves</span>
+              <span className="text-gray-400 text-sm">@{user?.username}</span>
             </p>
             <p className="pt-4 mx-auto text-left w-full md-max-h-36 md:max-w-4xl max-w-xl bg-transparent">
               LIMITAR A 320 CARACTERES oi e tryre u soi eu sou o yuri. oitrtrewr

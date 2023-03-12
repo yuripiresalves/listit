@@ -65,37 +65,39 @@ export default function Home() {
 
       <Header />
 
-      <section className="bg-emerald-800 2xl:h-96 h-64 flex items-center justify-center px-4">
-        <div className="max-w-[512px] flex flex-col items-center justify-center">
-          <p className="text-zinc-300 mb-6 w-full text-center font-bold ">
+      <section className="bg-emerald-800  h-64 flex items-center justify-center px-4">
+        <div className="text-center">
+          <h1 className="text-zinc-300 mb-6 w-full text-center font-bold text-xl">
             Pesquise entre milhares de animes disponíveis em nosso catálogo
-          </p>
-          <form onSubmit={handleSearchAnime} className="w-full flex gap-3">
-            <input
-              type="text"
-              placeholder="Pesquisar anime"
-              className="p-4 rounded-md bg-zinc-200 w-full"
-              value={animeName}
-              onChange={(e) => setAnimeName(e.target.value)}
-            />
-            <button className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all">
-              <MagnifyingGlass size={24} className="text-emerald-800" />
-            </button>
-            {animes.length > 0 && (
-              <button
-                className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all"
-                onClick={() => {
-                  setAnimeName('');
-                  setAnimes([]);
-                }}
-              >
-                <X size={24} className="text-red-600" />
+          </h1>
+          <div className="max-w-[512px] flex flex-col items-center justify-center m-auto">
+            <form onSubmit={handleSearchAnime} className="w-full flex gap-3">
+              <input
+                type="text"
+                placeholder="Pesquisar anime"
+                className="p-4 rounded-md bg-zinc-200 w-full"
+                value={animeName}
+                onChange={(e) => setAnimeName(e.target.value)}
+              />
+              <button className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all">
+                <MagnifyingGlass size={24} className="text-emerald-800" />
               </button>
-            )}
-          </form>
-          <span className="text-zinc-300 mt-2 text-left self-start text-sm">
-            Sugestões: Shingeki no Kyojin, Death Note, Naruto
-          </span>
+              {animes.length > 0 && (
+                <button
+                  className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all"
+                  onClick={() => {
+                    setAnimeName('');
+                    setAnimes([]);
+                  }}
+                >
+                  <X size={24} className="text-red-600" />
+                </button>
+              )}
+            </form>
+            <span className="text-zinc-300 mt-2 text-left self-start text-sm">
+              Sugestões: Shingeki no Kyojin, Death Note, Naruto
+            </span>
+          </div>
         </div>
       </section>
       <section className="py-10">

@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 
 export function Header() {
-  const { user } = useContext(AuthContext);
+  const { user, signOut } = useContext(AuthContext);
 
   return (
     <header className="py-4 bg-emerald-800 w-full">
@@ -39,7 +39,7 @@ export function Header() {
                     className="group-data-[state='open']:rotate-180 transition-transform"
                   />
                 </NavigationMenu.Trigger>
-                <NavigationMenu.Content className="animate-fadeIn absolute z-50 text-zinc-800 bg-zinc-100 rounded-md shadow-md p-2">
+                <NavigationMenu.Content className="animate-fadeIn mt-1 absolute right-7 z-50 text-zinc-800 bg-zinc-100 rounded-md shadow-md p-2">
                   <ul className="flex flex-col gap-4">
                     <Link href="/perfil">
                       <li className="flex items-center gap-2 hover:bg-gray-200 transition-colors p-2 rounded-md">
@@ -53,7 +53,7 @@ export function Header() {
                         Configurações
                       </li>
                     </Link>
-                    <button>
+                    <button onClick={signOut}>
                       <li className="flex items-center gap-2 hover:bg-rose-200 transition-colors p-2 rounded-md">
                         <SignOut size={18} />
                         Sair
