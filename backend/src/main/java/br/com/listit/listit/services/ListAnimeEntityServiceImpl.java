@@ -32,9 +32,9 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	
 	
 	public List<ListAnimeDTO> createAllList() {
-		User userCurrent = getUSerCurrent();
+		User userCurrent = getUserCurrent();
 		
-		if(userCurrent.getListAnime()==null || userCurrent.getListAnime().isEmpty()) {
+		if(userCurrent.getListAnime().isEmpty()) {
 			throw new OperationException("user I already have lists created");
 		}
 		
@@ -51,7 +51,7 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	
 	@Override
 	public ListAnimeDTO createList(TypeList typeList) {
-		User userCurrent = getUSerCurrent();
+		User userCurrent = getUserCurrent();
 		ListAnimeEntity listAnime = ListAnimeEntity.builder()
 		.type(typeList)
 		.items(new ArrayList<ItemAnimeEntity>())
@@ -136,7 +136,7 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 
 	@Override
 	public ListAnimeDTO addItemFavorite(int idAnime) {
-		User userCurrent = getUSerCurrent();
+		User userCurrent = getUserCurrent();
 		ListAnimeEntity findListByID = userCurrent.getListAnime().stream().filter(l -> TypeList.FAVORITO.equals(l.getType())).findFirst().get();
 		
 		animeService.findAnimeByID(idAnime);
@@ -157,7 +157,7 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		return convertListAnimeEntityToListAnimeDTO(save);
 	}
 	
-	private User getUSerCurrent() {
+	private User getUserCurrent() {
 		Optional<User> userCurrent = userService.getUserCurrent();
 		User user = null;
 

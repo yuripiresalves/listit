@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Component
-@ResponseStatus(code = HttpStatus.NOT_FOUND)
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 public class OperationException extends RuntimeException{
 
 	private static final long serialVersionUID = 1L;

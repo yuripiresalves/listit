@@ -10,6 +10,7 @@ import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,7 +51,6 @@ public class UserServiceImpl implements UserService {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 		
 		return userRepository.findByUsername(userDetails.getUsername());
-
 	}
 
 	private User convertUSerDtoToUserEntity(UserDTO dto) {
