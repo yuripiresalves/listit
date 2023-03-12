@@ -12,5 +12,7 @@ public interface UserService {
 	UserDTO login(String username, String password);
 	
 	Optional<User> getUserCurrent();
+	
+	UserDTO getUserDTOCurrent();
 
 }

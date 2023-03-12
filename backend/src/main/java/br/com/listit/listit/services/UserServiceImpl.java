@@ -28,28 +28,32 @@ public class UserServiceImpl implements UserService {
 		User convertUSerDtoToUserEntity = convertUSerDtoToUserEntity(userDTO);
 
 		convertUSerDtoToUserEntity.setPassword(passwordEncoder.encode(convertUSerDtoToUserEntity.getPassword()));
-		
+
 		User user = userRepository.save(convertUSerDtoToUserEntity);
 		return convertUserEntityToUSerDto(user);
 	}
 
 	@Override
 	public UserDTO login(String username, String password) {
-		
+
 		Optional<User> findByUsernameAndPassword = userRepository.findByUsernameAndPassword(username, password);
-		User user = findByUsernameAndPassword.orElseThrow(()->{
+		User user = findByUsernameAndPassword.orElseThrow(() -> {
 			throw new UserNotFoundException("username or password are incorrect");
 		});
 		return convertUserEntityToUSerDto(user);
 
 	}
-	
+
 	@Override
 	public Optional<User> getUserCurrent() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails;
 		
-		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-		
+		try {
+			userDetails = (UserDetails) auth.getPrincipal();
+		} catch (Exception e) {
+			throw new UserNotFoundException("User not found");
+		}
 		return userRepository.findByUsername(userDetails.getUsername());
 	}
 
@@ -60,6 +64,12 @@ public class UserServiceImpl implements UserService {
 
 	private UserDTO convertUserEntityToUSerDto(User user) {
 		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).build();
+	}
+
+	@Override
+	public UserDTO getUserDTOCurrent() {
+		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
+		return convertUserEntityToUSerDto(user);
 	}
 
 }
