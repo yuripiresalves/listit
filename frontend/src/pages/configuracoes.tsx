@@ -1,6 +1,8 @@
 import Head from 'next/head';
+import { GetServerSideProps } from 'next';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import { parseCookies } from 'nookies';
 
 import { GridContainer } from '../components/GridContainer';
 import { Header } from '../components/Header';
@@ -19,7 +21,7 @@ export default function Settings() {
       <Header />
 
       <GridContainer className="my-4 flex flex-1 rounded-md ">
-        <main className="flex flex-1 p-4 bg-zinc-100">
+        <main className="flex flex-1 p-4 bg-zinc-100 rounded-lg">
           <Tabs.Root
             defaultValue="personalInformations"
             className="flex flex-1"
@@ -112,3 +114,20 @@ export default function Settings() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['listit.token']: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

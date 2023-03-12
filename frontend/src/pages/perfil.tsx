@@ -1,12 +1,13 @@
 import Head from 'next/head';
-import * as Tabs from '@radix-ui/react-tabs';
+import { GetServerSideProps } from 'next';
+import { useContext } from 'react';
 
+import * as Tabs from '@radix-ui/react-tabs';
 import { GridContainer } from '../components/GridContainer';
 import { Header } from '../components/Header';
 import { AnimeCard } from '../components/AnimeCard';
-import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
-import { useRouter } from 'next/router';
+import { parseCookies } from 'nookies';
 
 export default function MyProfile() {
   const animes = [
@@ -33,10 +34,7 @@ export default function MyProfile() {
         'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
     },
   ];
-  const router = useRouter();
   const { user } = useContext(AuthContext);
-
-  if (!user) router.push('/');
 
   return (
     <>
@@ -124,3 +122,20 @@ export default function MyProfile() {
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['listit.token']: token } = parseCookies(ctx);
+
+  if (!token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};

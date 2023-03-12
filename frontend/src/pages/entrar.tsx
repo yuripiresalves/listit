@@ -1,21 +1,35 @@
-import { AuthContext } from '@/contexts/AuthContext';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { GoogleLogo } from 'phosphor-react';
 import { useContext } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
+import { parseCookies } from 'nookies';
+import { GoogleLogo } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
+import { toast } from 'react-toastify';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const { signIn, user } = useContext(AuthContext);
-  const router = useRouter();
+  const { signIn } = useContext(AuthContext);
 
-  if (user) router.push('/');
-
-  async function handleSignIn(data) {
-    await signIn(data);
+  async function handleSignIn(data: any) {
+    try {
+      await signIn(data);
+    } catch (error) {
+      console.log(error);
+      toast('Email ou senha incorretos', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    }
   }
 
   return (
@@ -87,3 +101,20 @@ export default function Login() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['listit.token']: token } = parseCookies(ctx);
+
+  if (token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
