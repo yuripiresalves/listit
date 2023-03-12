@@ -35,7 +35,7 @@ export function AuthProvider({ children }: any) {
 
     if (token) {
       api
-        .get('/authenticate/verify')
+        .get('/users')
         .then((response) => {
           const { userDTO } = response.data;
 
