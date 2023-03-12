@@ -10,6 +10,11 @@ import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 @AllArgsConstructor
@@ -23,20 +28,33 @@ public class UserServiceImpl implements UserService {
 		User convertUSerDtoToUserEntity = convertUSerDtoToUserEntity(userDTO);
 
 		convertUSerDtoToUserEntity.setPassword(passwordEncoder.encode(convertUSerDtoToUserEntity.getPassword()));
-		
+
 		User user = userRepository.save(convertUSerDtoToUserEntity);
 		return convertUserEntityToUSerDto(user);
 	}
 
 	@Override
 	public UserDTO login(String username, String password) {
-		
+
 		Optional<User> findByUsernameAndPassword = userRepository.findByUsernameAndPassword(username, password);
-		User user = findByUsernameAndPassword.orElseThrow(()->{
+		User user = findByUsernameAndPassword.orElseThrow(() -> {
 			throw new UserNotFoundException("username or password are incorrect");
 		});
 		return convertUserEntityToUSerDto(user);
 
+	}
+
+	@Override
+	public Optional<User> getUserCurrent() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails;
+		
+		try {
+			userDetails = (UserDetails) auth.getPrincipal();
+		} catch (Exception e) {
+			throw new UserNotFoundException("User not found");
+		}
+		return userRepository.findByUsername(userDetails.getUsername());
 	}
 
 	private User convertUSerDtoToUserEntity(UserDTO dto) {
@@ -46,6 +64,12 @@ public class UserServiceImpl implements UserService {
 
 	private UserDTO convertUserEntityToUSerDto(User user) {
 		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).build();
+	}
+
+	@Override
+	public UserDTO getUserDTOCurrent() {
+		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
+		return convertUserEntityToUSerDto(user);
 	}
 
 }

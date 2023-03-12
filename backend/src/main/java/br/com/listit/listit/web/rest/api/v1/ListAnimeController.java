@@ -1,5 +1,7 @@
 package br.com.listit.listit.web.rest.api.v1;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @CrossOrigin
@@ -29,18 +32,30 @@ import lombok.AllArgsConstructor;
 @EnableMethodSecurity(prePostEnabled = true)
 @SecurityRequirement(name = "Bearer Authentication")
 @AllArgsConstructor
+@Log4j2
 public class ListAnimeController {
 	private ListAnimeEntityService listAnimeEntityService;
 	
-	@PostMapping("/{type}")
-	@ApiResponse(responseCode = "200", description = "Found List anime", content = {
+//	@PostMapping("/{type}")
+//	@ApiResponse(responseCode = "201", description = "Found List anime", content = {
+//			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
+//	public ResponseEntity<?> createList(@PathVariable("type") String type){
+//		TypeList valueOf = TypeList.valueOf(type);
+//		
+//		ListAnimeDTO createList = listAnimeEntityService.createList(valueOf);
+//		
+//		return new ResponseEntity<>(createList, HttpStatus.CREATED);
+//		
+//	}
+//	
+	@PostMapping("/create")
+	@ApiResponse(responseCode = "201", description = "Created all List anime", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> createList(@PathVariable("type") String type){
-		TypeList valueOf = TypeList.valueOf(type);
+	public ResponseEntity<?> createAllList(){
+		log.info("tá chamando confia");
+		List<ListAnimeDTO> createAllList = listAnimeEntityService.createAllList();
 		
-		ListAnimeDTO createList = listAnimeEntityService.createList(valueOf);
-		
-		return new ResponseEntity<>(createList, HttpStatus.CREATED);
+		return new ResponseEntity<>(createAllList, HttpStatus.CREATED);
 		
 	}
 
@@ -57,6 +72,14 @@ public class ListAnimeController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
 	public ResponseEntity<?> addItem(@PathVariable("idList") int idList,@PathVariable("idAnime") int idAnime) {
 		ListAnimeDTO addItem = listAnimeEntityService.addItem(idList, idAnime);
+		return ResponseEntity.ok(addItem);
+	}
+	
+	@PutMapping("/{idAnime}")
+	@ApiResponse(responseCode = "200", description = "add anime in List Favorite anime by id", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
+	public ResponseEntity<?> addItemInFavorite(@PathVariable("idAnime") int idAnime) {
+		ListAnimeDTO addItem = listAnimeEntityService.addItemFavorite(idAnime);
 		return ResponseEntity.ok(addItem);
 	}
 	
