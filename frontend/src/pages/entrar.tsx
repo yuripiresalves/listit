@@ -1,13 +1,21 @@
+import { AuthContext } from '@/contexts/AuthContext';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { GoogleLogo } from 'phosphor-react';
-import { FormEvent } from 'react';
+import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 
 export default function Login() {
-  function handleLogin(event: FormEvent) {
-    event.preventDefault();
-    alert('login');
+  const { register, handleSubmit } = useForm();
+  const { signIn, user } = useContext(AuthContext);
+  const router = useRouter();
+
+  if (user) router.push('/');
+
+  async function handleSignIn(data) {
+    await signIn(data);
   }
 
   return (
@@ -25,17 +33,22 @@ export default function Login() {
 
         <section className="w-full md:w-[672px] mx-auto p-8 flex flex-col items-center justify-center">
           <div className="flex flex-col w-full md:w-96">
-            <form className="flex flex-col gap-4">
+            <form
+              className="flex flex-col gap-4"
+              onSubmit={handleSubmit(handleSignIn)}
+            >
               <h2 className="text-2xl font-bold ">
                 Olá 👋, <span className="block">entre em sua conta</span>
               </h2>
               <input
-                type="email"
+                {...register('email')}
+                type="text"
                 placeholder="fulano@email.com"
                 className=" p-4 rounded-md"
                 required
               />
               <input
+                {...register('password')}
                 type="password"
                 placeholder="********"
                 className=" p-4 rounded-md"
@@ -43,7 +56,6 @@ export default function Login() {
               />
               <button
                 type="submit"
-                onClick={handleLogin}
                 className="bg-emerald-600 p-4 rounded-md text-zinc-200 font-bold text-xl hover:bg-emerald-700 transition-colors flex justify-center"
               >
                 Entrar
