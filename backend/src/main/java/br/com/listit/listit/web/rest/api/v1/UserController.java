@@ -6,11 +6,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.listit.listit.services.UserService;
+import br.com.listit.listit.services.user.UserService;
 import br.com.listit.listit.web.dto.UserDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,6 +36,15 @@ public class UserController {
 		UserDTO createUser = userService.createUser(userDTO);
 		return new ResponseEntity<>(createUser, HttpStatus.CREATED);
 	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@PutMapping("/password")
+	public ResponseEntity<?> updatePasswordUser(@RequestBody String password) {
+		userService.updatePasswordUserCurrent(password);
+		return ResponseEntity.ok().build();
+	}
 
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "get User current", content = {
@@ -43,5 +53,23 @@ public class UserController {
 	public ResponseEntity<?> userCurrent() {
 		UserDTO userDTOCurrent = userService.getUserDTOCurrent();
 		return new ResponseEntity<>(userDTOCurrent, HttpStatus.CREATED);
+	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@PutMapping("/profile/view/desability")
+	public ResponseEntity<?> profileViewDesability() {
+		 userService.desabilityViewProfile();
+		return ResponseEntity.ok().build();
+	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@PutMapping("/profile/view/active")
+	public ResponseEntity<?> profileViewActive() {
+		 userService.activeViewProfile();
+		return ResponseEntity.ok().build();
 	}
 }

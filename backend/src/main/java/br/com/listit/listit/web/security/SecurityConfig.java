@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import br.com.listit.listit.services.UserDetailsServiceImpl;
+import br.com.listit.listit.services.user.security.UserDetailsServiceImpl;
 import br.com.listit.listit.web.security.filter.JwtAuthenticationEntryPoint;
 import br.com.listit.listit.web.security.filter.JwtRequestFilter;
 import lombok.extern.log4j.Log4j2;
@@ -58,10 +58,9 @@ public class SecurityConfig extends AbstractAnnotationConfigDispatcherServletIni
 		httpSecurity.authorizeHttpRequests().requestMatchers("/api/lists/**").authenticated().and()
 				.authorizeHttpRequests()
 				.requestMatchers("/api/authenticate/login", "**/public/**", "/swagger-resources/**", "/swagger-ui/**",
-						"/swagger-ui.html", "/api-docs/**", "/api/animes/findById/**", "/api/animes/findByName/**",
+						"/swagger-ui.html", "/api-docs/**", "/api/animes/findById/**", "/api/animes/findByName/**", "/api/lists/findByUsername/**",
 						"/api/users/create")
 				.permitAll()
-
 				.and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
 				.authorizeHttpRequests().anyRequest().permitAll().and().httpBasic();
 		httpSecurity.addFilterAfter(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

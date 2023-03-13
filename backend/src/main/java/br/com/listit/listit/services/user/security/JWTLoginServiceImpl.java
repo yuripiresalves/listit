@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user.security;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;

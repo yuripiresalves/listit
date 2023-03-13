@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user.security;
 
 import java.util.Optional;
 

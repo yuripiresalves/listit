@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user;
 
 import java.util.Optional;
 
@@ -14,5 +14,11 @@ public interface UserService {
 	Optional<User> getUserCurrent();
 	
 	UserDTO getUserDTOCurrent();
+	
+	void desabilityViewProfile();
+	
+	void activeViewProfile();
+	
+	void updatePasswordUserCurrent(String password);
 
 }
