@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.listit.listit.domain.entity.TypeList;
+import br.com.listit.listit.exception.OperationException;
 import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.web.dto.ListAnimeDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -67,7 +68,7 @@ public class ListAnimeController {
 	@ApiResponse(responseCode = "200", description = "find List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
 	public ResponseEntity<?> getById(@PathVariable("type") String type) {
-		ListAnimeDTO byId = listAnimeEntityService.getByTypeList(TypeList.valueOf(type));
+		ListAnimeDTO byId = listAnimeEntityService.getByTypeList(getTypeListFromString(type));
 		return ResponseEntity.ok(byId);
 	}
 
@@ -76,7 +77,7 @@ public class ListAnimeController {
 	@ApiResponse(responseCode = "200", description = "add anime in List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
 	public ResponseEntity<?> addItem(@PathVariable("type") String type, @PathVariable("idAnime") int idAnime) {
-		ListAnimeDTO addItem = listAnimeEntityService.addItem(TypeList.valueOf(type), idAnime);
+		ListAnimeDTO addItem = listAnimeEntityService.addItem(getTypeListFromString(type), idAnime);
 		return ResponseEntity.ok(addItem);
 	}
 
@@ -89,12 +90,12 @@ public class ListAnimeController {
 		return ResponseEntity.ok(addItem);
 	}
 
-	@DeleteMapping("/{idList}/{idAnime}")
+	@DeleteMapping("/{type}/{idAnime}")
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "remove anime in List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> removeItem(int idList, int idAnime) {
-		listAnimeEntityService.removeItem(idList, idAnime);
+	public ResponseEntity<?> removeItem(@PathVariable("type") String type, int idAnime) {
+		listAnimeEntityService.removeItem(getTypeListFromString(type), idAnime);
 		return ResponseEntity.noContent().build();
 	}
 	
@@ -105,6 +106,14 @@ public class ListAnimeController {
 	public ResponseEntity<?> getAllListsById(@PathVariable("username") String username) {
 		List<ListAnimeDTO> allLists = listAnimeEntityService.getAllListsByUsername(username);
 		return ResponseEntity.ok(allLists);
+	}
+	
+	private TypeList getTypeListFromString(String type) {
+		try {
+			return TypeList.valueOf(type);
+		}catch (Exception e) {
+			throw new OperationException(type+" unidentified type");
+		}
 	}
 
 }

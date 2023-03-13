@@ -62,10 +62,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@ExceptionHandler(OperationException.class)
-	public ResponseEntity<RequestExceptionDetails> userNotFoundException(OperationException operationException) {
+	public ResponseEntity<RequestExceptionDetails> operationExceptionException(OperationException operationException) {
 
 		return new ResponseEntity<>(RequestExceptionDetails.builder().timeStamps(LocalDateTime.now())
-				.status(HttpStatus.UNAUTHORIZED.value()).title("Bad Credentials, try again")
+				.status(HttpStatus.BAD_REQUEST.value()).title("Bad Request - Operation Faild")
 				.details(operationException.getMessage()).developerMessge(operationException.getClass().getName())
 				.build(), HttpStatus.BAD_REQUEST);
 	}

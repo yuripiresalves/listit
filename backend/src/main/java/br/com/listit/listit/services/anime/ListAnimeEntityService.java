@@ -11,7 +11,7 @@ public interface ListAnimeEntityService {
 	ListAnimeDTO getByTypeList(TypeList type);
 	ListAnimeDTO addItem(TypeList type, int idAnime);
 	ListAnimeDTO addItemFavorite(int idAnime);
-	void removeItem(int idList, int idAnime);
+	void removeItem(TypeList type, int idAnime);
 	List<ListAnimeDTO> createAllList();
 	List<ListAnimeDTO> getAll();
 	List<ListAnimeDTO> getAllListsByUsername(String id);
