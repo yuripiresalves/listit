@@ -19,7 +19,14 @@ export function Table({ listType }: TableProps) {
   useEffect(() => {
     async function getAnimes() {
       try {
-        const response = await api.get(`/lists/${listType}`);
+        let response;
+
+        if(listType == ""){
+          response = await api.get(`/lists/all`);
+        }else{
+          response = await api.get(`/lists/${listType}`);
+        }
+        
         animes = await response.data;
       } catch (error) {
         console.log(error);
