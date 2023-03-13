@@ -72,6 +72,16 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 	
+	@Override
+	public void updateDesciption(String description) {
+		Optional<User> userCurrent = getUserCurrent();
+		User user = extratUserLoggedOrThrowException(userCurrent);
+		
+		user.setDescription(description);
+		
+		userRepository.save(user);
+	}
+	
 	private User extratUserLoggedOrThrowException(Optional<User> userCurrent) {
 		return userCurrent.orElseThrow(()->{
 			throw new UserNotFoundException("User not found");
@@ -94,11 +104,11 @@ public class UserServiceImpl implements UserService {
 
 	private User convertUSerDtoToUserEntity(UserDTO dto) {
 		return User.builder().email(dto.getEmail()).name(dto.getName()).viewProfile(dto.isViewProfile()).password(dto.getPassword())
-				.username(dto.getUsername()).build();
+				.username(dto.getUsername()).description(dto.getDescription()).build();
 	}
 
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).viewProfile(user.isViewProfile()).username(user.getUsername()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).viewProfile(user.isViewProfile()).description(user.getDescription()).username(user.getUsername()).build();
 	}
 
 	@Override
@@ -106,6 +116,5 @@ public class UserServiceImpl implements UserService {
 		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
 		return convertUserEntityToUSerDto(user);
 	}
-
 
 }

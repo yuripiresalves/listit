@@ -84,13 +84,20 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	
 	
 	@Override
-	public ListAnimeDTO getById(int id) {
-		return convertListAnimeEntityToListAnimeDTO(findListByID(id));
+	public ListAnimeDTO getByTypeList(TypeList type) {
+		Optional<ListAnimeEntity> findFirst = getUserCurrent().getListAnime().stream().filter(l -> l.getType().equals(type)).findFirst();
+		
+		ListAnimeEntity listAnimeEntity = findFirst.orElseThrow(()-> new OperationException("List Not found"));
+		
+		return convertListAnimeEntityToListAnimeDTO(listAnimeEntity);
 	}
 
 	@Override
-	public ListAnimeDTO addItem(int idList, int idAnime) {
-		ListAnimeEntity findListByID = findListByID(idList);
+	public ListAnimeDTO addItem(TypeList type, int idAnime) {
+		Optional<ListAnimeEntity> findFirst = getUserCurrent().getListAnime().stream().filter(l -> l.getType().equals(type)).findFirst();
+		
+		ListAnimeEntity findListByID = findFirst.orElseThrow(()-> new OperationException("List Not found"));
+
 		animeService.findAnimeByID(idAnime);
 
 		if (findListByID.getItems() == null) {

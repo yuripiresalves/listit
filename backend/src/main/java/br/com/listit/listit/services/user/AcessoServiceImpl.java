@@ -76,7 +76,7 @@ public class AcessoServiceImpl implements AcessoService {
 	}
 	
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).description(user.getDescription()).build();
 	}
 
 	@Override

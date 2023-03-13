@@ -20,5 +20,7 @@ public interface UserService {
 	void activeViewProfile();
 	
 	void updatePasswordUserCurrent(String password);
+	
+	void updateDesciption(String description);
 
 }
