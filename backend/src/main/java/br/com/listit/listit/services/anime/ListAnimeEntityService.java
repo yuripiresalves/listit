@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.anime;
 
 import java.util.List;
 
@@ -13,4 +13,6 @@ public interface ListAnimeEntityService {
 	ListAnimeDTO addItemFavorite(int idAnime);
 	void removeItem(int idList, int idAnime);
 	List<ListAnimeDTO> createAllList();
+	List<ListAnimeDTO> getAll();
+	List<ListAnimeDTO> getAllListsByUsername(String id);
 }

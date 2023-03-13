@@ -1,7 +1,10 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user;
 
 import java.util.Optional;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +13,6 @@ import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @Service
 @AllArgsConstructor
@@ -43,6 +41,43 @@ public class UserServiceImpl implements UserService {
 		return convertUserEntityToUSerDto(user);
 
 	}
+	
+	@Override
+	public void desabilityViewProfile() {
+		Optional<User> userCurrent = getUserCurrent();
+		User user = extratUserLoggedOrThrowException(userCurrent);
+		
+		user.setViewProfile(false);
+		
+		userRepository.save(user);
+	}
+
+	@Override
+	public void activeViewProfile() {
+		Optional<User> userCurrent = getUserCurrent();
+		User user = extratUserLoggedOrThrowException(userCurrent);
+		
+		user.setViewProfile(true);
+		
+		userRepository.save(user);
+	}
+	
+	@Override
+	public void updatePasswordUserCurrent(String password) {
+		Optional<User> userCurrent = getUserCurrent();
+		User user = extratUserLoggedOrThrowException(userCurrent);
+		
+		user.setPassword(passwordEncoder.encode(password));
+		
+		userRepository.save(user);
+	}
+	
+	private User extratUserLoggedOrThrowException(Optional<User> userCurrent) {
+		return userCurrent.orElseThrow(()->{
+			throw new UserNotFoundException("User not found");
+		});
+		
+	}
 
 	@Override
 	public Optional<User> getUserCurrent() {
@@ -58,12 +93,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private User convertUSerDtoToUserEntity(UserDTO dto) {
-		return User.builder().email(dto.getEmail()).name(dto.getName()).password(dto.getPassword())
+		return User.builder().email(dto.getEmail()).name(dto.getName()).viewProfile(dto.isViewProfile()).password(dto.getPassword())
 				.username(dto.getUsername()).build();
 	}
 
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).viewProfile(user.isViewProfile()).username(user.getUsername()).build();
 	}
 
 	@Override
@@ -71,5 +106,6 @@ public class UserServiceImpl implements UserService {
 		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
 		return convertUserEntityToUSerDto(user);
 	}
+
 
 }

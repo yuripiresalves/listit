@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.anime;
 
 
 import java.util.List;

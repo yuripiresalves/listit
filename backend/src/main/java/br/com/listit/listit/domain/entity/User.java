@@ -38,4 +38,8 @@ public class User {
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
 	private List<ListAnimeEntity> listAnime;
+	
+	@Column(columnDefinition = "boolean default true")
+	@Builder.Default
+	private boolean viewProfile  = true;
 }

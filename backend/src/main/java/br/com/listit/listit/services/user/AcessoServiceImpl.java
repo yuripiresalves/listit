@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -17,6 +17,7 @@ import br.com.listit.listit.domain.entity.AcessoUser;
 import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.BadCredentialsCustomException;
 import br.com.listit.listit.exception.UserDisabledException;
+import br.com.listit.listit.services.user.security.UserDetailsServiceImpl;
 import br.com.listit.listit.web.dto.TokenJwtDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import br.com.listit.listit.web.security.token.TokenUtil;
@@ -75,7 +76,7 @@ public class AcessoServiceImpl implements AcessoService {
 	}
 	
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).build();
 	}
 
 	@Override

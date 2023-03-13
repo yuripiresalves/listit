@@ -1,4 +1,4 @@
-package br.com.listit.listit.services;
+package br.com.listit.listit.services.user;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.listit.listit.exception.BadCredentialsCustomException;
-import br.com.listit.listit.services.AcessoService;
+import br.com.listit.listit.services.user.AcessoService;
 import br.com.listit.listit.web.security.token.TokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
