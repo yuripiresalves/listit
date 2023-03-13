@@ -65,7 +65,7 @@ public class SecurityConfig extends AbstractAnnotationConfigDispatcherServletIni
 				.authorizeHttpRequests().anyRequest().permitAll().and().httpBasic();
 		httpSecurity.addFilterAfter(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		httpSecurity.csrf().disable();
-		httpSecurity.cors().disable();
+		httpSecurity.cors();
 
 		return httpSecurity.build();
 	}

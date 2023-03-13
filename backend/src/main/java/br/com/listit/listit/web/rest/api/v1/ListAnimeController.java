@@ -45,7 +45,7 @@ public class ListAnimeController {
 
 	}
 
-	@GetMapping
+	@GetMapping("/all")
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "find List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
