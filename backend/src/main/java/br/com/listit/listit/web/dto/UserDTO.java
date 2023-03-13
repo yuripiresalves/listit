@@ -20,4 +20,6 @@ public class UserDTO {
 	private boolean viewProfile;
 	
 	private String password;
+	
+	private String description;
 }

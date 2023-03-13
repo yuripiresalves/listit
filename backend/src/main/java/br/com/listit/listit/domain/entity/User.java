@@ -42,4 +42,7 @@ public class User {
 	@Column(columnDefinition = "boolean default true")
 	@Builder.Default
 	private boolean viewProfile  = true;
+	
+	@Column(length = 320)
+	private String description;
 }

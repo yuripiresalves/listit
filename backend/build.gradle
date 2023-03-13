@@ -4,6 +4,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.0'
 	id 'eclipse'
 	id 'idea'
+	//id 'com.google.cloud.tools.jib' version '1.8.0'
 }
 
 group = 'br.com.listit'
@@ -48,3 +49,13 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+/*jib {
+    from {
+        image = 'https://dso.docker.com/images/openjdk/digests/sha256:028015df0ef996dc922c625f456039b37319c5cf10a2aa40d8670727a70f5e02'
+    }
+
+    to {
+        image = "johnwillv/${project.name}:${project.version}"
+    }
+}*/

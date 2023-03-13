@@ -56,7 +56,7 @@ public class UserController {
 	}
 	
 	@SecurityRequirement(name = "Bearer Authentication")
-	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+	@ApiResponse(responseCode = "200", description = "set profile view for desability", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
 	@PutMapping("/profile/view/desability")
 	public ResponseEntity<?> profileViewDesability() {
@@ -65,11 +65,20 @@ public class UserController {
 	}
 	
 	@SecurityRequirement(name = "Bearer Authentication")
-	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+	@ApiResponse(responseCode = "200", description = "set profile view for active", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
 	@PutMapping("/profile/view/active")
 	public ResponseEntity<?> profileViewActive() {
 		 userService.activeViewProfile();
+		return ResponseEntity.ok().build();
+	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "set description User", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@PutMapping("/description")
+	public ResponseEntity<?> description(@RequestBody String description) {
+		 userService.updateDesciption(description);
 		return ResponseEntity.ok().build();
 	}
 }

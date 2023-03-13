@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.listit.listit.domain.entity.TypeList;
 import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.web.dto.ListAnimeDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -28,7 +28,6 @@ import lombok.extern.log4j.Log4j2;
 @CrossOrigin
 @RequestMapping("/api/lists")
 @Tag(name = "list", description = "manager lists")
-@EnableMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
 @Log4j2
 public class ListAnimeController {
@@ -54,22 +53,30 @@ public class ListAnimeController {
 		List<ListAnimeDTO> allLists = listAnimeEntityService.getAll();
 		return ResponseEntity.ok(allLists);
 	}
+	
+	@GetMapping("/types")
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "find List anime by id", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = TypeList.class)) })
+	public ResponseEntity<?> getAllTypeLists() {
+		return ResponseEntity.ok(TypeList.values());
+	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{type}")
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "find List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> getById(@PathVariable("id") int id) {
-		ListAnimeDTO byId = listAnimeEntityService.getById(id);
+	public ResponseEntity<?> getById(@PathVariable("type") String type) {
+		ListAnimeDTO byId = listAnimeEntityService.getByTypeList(TypeList.valueOf(type));
 		return ResponseEntity.ok(byId);
 	}
 
-	@PutMapping("/add/{idList}/{idAnime}")
+	@PutMapping("/add/{type}/{idAnime}")
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "add anime in List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> addItem(@PathVariable("idList") int idList, @PathVariable("idAnime") int idAnime) {
-		ListAnimeDTO addItem = listAnimeEntityService.addItem(idList, idAnime);
+	public ResponseEntity<?> addItem(@PathVariable("type") String type, @PathVariable("idAnime") int idAnime) {
+		ListAnimeDTO addItem = listAnimeEntityService.addItem(TypeList.valueOf(type), idAnime);
 		return ResponseEntity.ok(addItem);
 	}
 
