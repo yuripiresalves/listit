@@ -180,19 +180,19 @@ export default function Home() {
                 </Tabs.List>
               </div>
               <Tabs.Content value="all">
-                <Table />
+                <Table listType="" />
               </Tabs.Content>
               <Tabs.Content value="watching">
-                <Table />
+                <Table listType="ASSISTINDO" />
               </Tabs.Content>
               <Tabs.Content value="finished">
-                <Table />
+                <Table listType="FINALIZADO" />
               </Tabs.Content>
               <Tabs.Content value="toWatch">
-                <Table />
+                <Table listType="PARA_ASSISTIR" />
               </Tabs.Content>
               <Tabs.Content value="favorites">
-                <Table />
+                <Table listType="FAVORITO" />
               </Tabs.Content>
             </Tabs.Root>
           </GridContainer>

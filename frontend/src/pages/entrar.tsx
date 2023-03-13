@@ -55,9 +55,9 @@ export default function Login() {
                 Olá 👋, <span className="block">entre em sua conta</span>
               </h2>
               <input
-                {...register('email')}
+                {...register('username')}
                 type="text"
-                placeholder="fulano@email.com"
+                placeholder="nome de usuário"
                 className=" p-4 rounded-md"
                 required
               />

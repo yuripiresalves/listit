@@ -11,7 +11,7 @@ type User = {
 };
 
 type SignInCredentials = {
-  email: string;
+  username: string;
   password: string;
 };
 
@@ -49,9 +49,9 @@ export function AuthProvider({ children }: any) {
     }
   }, []);
 
-  async function signIn({ email, password }: SignInCredentials) {
+  async function signIn({ username, password }: SignInCredentials) {
     const { data } = await api.post('/authenticate/login', {
-      username: email,
+      username,
       password,
     });
 
