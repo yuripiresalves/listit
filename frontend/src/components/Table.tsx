@@ -1,6 +1,7 @@
 import { api } from '@/services/api';
 import { GetServerSideProps } from 'next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Loading } from './Loading';
 
 interface TableProps {
   listType: '' | 'ASSISTINDO' | 'FINALIZADO' | 'PARA_ASSISTIR' | 'FAVORITO';
@@ -13,67 +14,109 @@ interface Anime {
   score: number;
 }
 
+interface List {
+  id: number;
+  type: string;
+  items: Anime[];
+}
+
 export function Table({ listType }: TableProps) {
-  let animes: Anime[] = [];
+  const [animes, setAnimes] = useState<Anime[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getAnimes() {
       try {
         let response;
 
-        if(listType == ""){
+        if (listType == '') {
+          setIsLoading(true);
           response = await api.get(`/lists/all`);
-        }else{
+
+          const animesList = response.data.map((list: List) => {
+            return list.items;
+          });
+
+          const animes = animesList.flat();
+
+          const animesFiltered = animes.filter(
+            (anime: Anime, index: number) => {
+              return (
+                animes.findIndex((a: Anime) => a.id === anime.id) === index
+              );
+            }
+          );
+
+          setAnimes(animesFiltered);
+        } else {
+          setIsLoading(true);
           response = await api.get(`/lists/${listType}`);
+          setAnimes(response.data.items);
         }
-        
-        animes = await response.data;
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     }
     getAnimes();
   }, []);
 
   return (
-    <div className="h-96 overflow-scroll">
-      <table className="w-full border-collapse">
-        <thead className="text-left">
-          <tr>
-            <th className="p-4 bg-emerald-800 text-zinc-100 rounded-tl-md rounded-bl-md">
-              Nome
-            </th>
-            <th className="p-4 bg-emerald-800 text-zinc-100">Episódios</th>
-            <th className="p-4 bg-emerald-800 text-zinc-100">Nota</th>
-            <th className="p-4 bg-emerald-800 text-zinc-100">Adicionado em</th>
-            <th className="p-4 bg-emerald-800 text-zinc-100 rounded-tr-md rounded-br-md">
-              Opções
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {animes.map((anime) => (
-            <tr key={anime.id}>
-              <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tl-md rounded-bl-md">
-                {anime.title}
-              </td>
-              <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
-                {anime.episodes}
-              </td>
-              <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
-                {anime.score}
-              </td>
-              <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
-                10/10/2021
-              </td>
-              <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tr-md rounded-br-md">
-                Opções
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : animes.length > 0 ? (
+        <div className="h-96 overflow-scroll relative">
+          <table className="w-full border-collapse">
+            <thead className="text-left">
+              <tr className="w-full">
+                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100 rounded-tl-md rounded-bl-md">
+                  Nome
+                </th>
+                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100">
+                  Episódios
+                </th>
+                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100">
+                  Nota
+                </th>
+                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100">
+                  Adicionado em
+                </th>
+                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100 rounded-tr-md rounded-br-md">
+                  Opções
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {animes.map((anime) => (
+                <tr key={anime.id}>
+                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tl-md rounded-bl-md">
+                    {anime.title}
+                  </td>
+                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
+                    {anime.episodes}
+                  </td>
+                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
+                    {anime.score}
+                  </td>
+                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
+                    10/10/2021
+                  </td>
+                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tr-md rounded-br-md">
+                    Opções
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p className="text-center pt-16 text-lg text-zinc-500">
+          A lista está vazia
+        </p>
+      )}
+    </>
   );
 }
 

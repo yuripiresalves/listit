@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import * as Tabs from '@radix-ui/react-tabs';
 import { GridContainer } from '../components/GridContainer';
@@ -8,33 +8,52 @@ import { Header } from '../components/Header';
 import { AnimeCard } from '../components/AnimeCard';
 import { AuthContext } from '@/contexts/AuthContext';
 import { parseCookies } from 'nookies';
+import { api } from '@/services/api';
+import { Anime } from '.';
 
 export default function MyProfile() {
-  const animes = [
-    {
-      id: 1,
-      title: 'Shingeki no Kyojin',
-      episodes: 40,
-      score: 9.9,
-      imageJPG: {
-        imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-      },
-      synopsis:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
-    },
-    {
-      id: 2,
-      title: 'Death note',
-      episodes: 37,
-      score: 10,
-      imageJPG: {
-        imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-      },
-      synopsis:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
-    },
-  ];
+  // const animes = [
+  //   {
+  //     id: 1,
+  //     title: 'Shingeki no Kyojin',
+  //     episodes: 40,
+  //     score: 9.9,
+  //     imageJPG: {
+  //       imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
+  //     },
+  //     synopsis:
+  //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Death note',
+  //     episodes: 37,
+  //     score: 10,
+  //     imageJPG: {
+  //       imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
+  //     },
+  //     synopsis:
+  //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
+  //   },
+  // ];
+  const [animes, setAnimes] = useState<Anime[]>([]);
   const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    getAnimes('FAVORITO');
+  }, []);
+
+  async function getAnimes(listType: string) {
+    try {
+      const response = await api.get(`/lists/${listType}`);
+      const data = await response.data;
+      console.log(data);
+
+      setAnimes(data.items);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -65,11 +84,12 @@ export default function MyProfile() {
               fgfdgffhfhgfgerr eoghret y4389y LIMITAR A 320 CARACTERES
             </p>
           </div>
-          <section className="pb-4">
+          <section className="pb-4 w-full">
             <Tabs.Root defaultValue="favorites">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-8">
                 <Tabs.List>
                   <Tabs.Trigger
+                    onClick={() => getAnimes('FAVORITO')}
                     value="favorites"
                     className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
                   >
@@ -80,6 +100,7 @@ export default function MyProfile() {
                 </Tabs.List>
                 <Tabs.List>
                   <Tabs.Trigger
+                    onClick={() => getAnimes('ASSISTINDO')}
                     value="watching"
                     className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
                   >
@@ -90,6 +111,7 @@ export default function MyProfile() {
                 </Tabs.List>
                 <Tabs.List>
                   <Tabs.Trigger
+                    onClick={() => getAnimes('FINALIZADO')}
                     value="finished"
                     className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
                   >
@@ -100,6 +122,7 @@ export default function MyProfile() {
                 </Tabs.List>
                 <Tabs.List>
                   <Tabs.Trigger
+                    onClick={() => getAnimes('PARA_ASSISTIR')}
                     value="toWatch"
                     className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
                   >
@@ -109,13 +132,49 @@ export default function MyProfile() {
                   </Tabs.Trigger>
                 </Tabs.List>
               </div>
+              {animes.length === 0 && (
+                <div className="flex flex-col items-center justify-center">
+                  <h1 className="text-2xl font-bold text-zinc-500">
+                    Nenhum anime encontrado
+                  </h1>
+                  <p className="text-gray-500 text-center">
+                    Você ainda não adicionou nenhum anime a essa lista
+                  </p>
+                </div>
+              )}
+              <Tabs.Content
+                value="favorites"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[45rem] overflow-y-auto"
+              >
+                {animes.map((anime) => (
+                  <AnimeCard anime={anime} />
+                ))}
+              </Tabs.Content>
+              <Tabs.Content
+                value="watching"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[45rem] overflow-y-auto"
+              >
+                {animes.map((anime) => (
+                  <AnimeCard anime={anime} />
+                ))}
+              </Tabs.Content>
+              <Tabs.Content
+                value="finished"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[45rem] overflow-y-auto"
+              >
+                {animes.map((anime) => (
+                  <AnimeCard anime={anime} />
+                ))}
+              </Tabs.Content>
+              <Tabs.Content
+                value="toWatch"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[45rem] overflow-y-auto"
+              >
+                {animes.map((anime) => (
+                  <AnimeCard anime={anime} />
+                ))}
+              </Tabs.Content>
             </Tabs.Root>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 max-h-[45rem] overflow-y-auto">
-              {animes.map((anime) => (
-                <AnimeCard anime={anime} />
-              ))}
-            </div>
           </section>
         </main>
       </GridContainer>

@@ -65,7 +65,7 @@ export default function Home() {
 
       <Header />
 
-      <section className="bg-emerald-800  h-64 flex items-center justify-center px-4">
+      <section className="bg-emerald-800 h-64 flex items-center justify-center px-4">
         <div className="text-center">
           <h1 className="text-zinc-300 mb-6 w-full text-center font-bold text-xl">
             Pesquise entre milhares de animes disponíveis em nosso catálogo
@@ -100,7 +100,7 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="py-10">
+      <section className="py-7">
         {/* {hasError && <AnimeNotFound />} */}
         {isLoading ? (
           <GridContainer>
