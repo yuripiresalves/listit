@@ -15,7 +15,7 @@ export function Header() {
 
   return (
     <header className="py-4 bg-emerald-800 w-full">
-      <GridContainer className="flex justify-between items-center text-zinc-200">
+      <GridContainer className="flex justify-between items-center text-zinc-200 relative">
         <Link href="/">
           <Logo size="sm" />
         </Link>
@@ -24,7 +24,7 @@ export function Header() {
           <NavigationMenu.Root>
             <NavigationMenu.List>
               <NavigationMenu.Item>
-                <NavigationMenu.Trigger className="group flex items-center gap-4 cursor-pointer relative">
+                <NavigationMenu.Trigger className="group flex items-center gap-4 cursor-pointer">
                   <strong>{user.name}</strong>
                   <Image
                     src="https://i.pravatar.cc/50"

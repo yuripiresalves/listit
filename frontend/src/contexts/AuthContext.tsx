@@ -37,11 +37,13 @@ export function AuthProvider({ children }: any) {
       api
         .get('/users')
         .then((response) => {
-          const { userDTO } = response.data;
+          const user = response.data;
 
-          setUser(userDTO);
+          setUser(user);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.log(error);
+
           signOut();
         });
     }
@@ -57,6 +59,8 @@ export function AuthProvider({ children }: any) {
       maxAge: 60 * 60 * 1, // 1 hour
     });
 
+    api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+
     setUser(data.userDTO);
     router.push('/');
   }
@@ -66,6 +70,7 @@ export function AuthProvider({ children }: any) {
     setCookie(undefined, 'listit.token', '', {
       maxAge: -1,
     });
+    router.push('/');
   }
 
   return (

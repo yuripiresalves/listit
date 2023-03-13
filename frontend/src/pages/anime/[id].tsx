@@ -10,6 +10,7 @@ import { api } from '@/services/api';
 import { GridContainer } from '../../components/GridContainer';
 import { Loading } from '@/components/Loading';
 import { Error } from '@/components/Error';
+import { Header } from '@/components/Header';
 
 type Anime = {
   id: number;
@@ -57,6 +58,8 @@ export default function AnimeDetails() {
           content="Listit - Organize seus animes em listas"
         />
       </Head>
+
+      <Header />
 
       {isLoading ? (
         <Loading />

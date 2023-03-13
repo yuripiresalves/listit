@@ -1,9 +1,11 @@
 import { FormEvent, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { api } from '@/services/api';
 import { toast } from 'react-toastify';
+import { parseCookies } from 'nookies';
 
 import { AsideBanner } from '../components/AsideBanner';
 
@@ -60,6 +62,17 @@ export default function CreateAccount() {
       }
     } catch (error) {
       console.log(error);
+      toast('Erro ao criar conta', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     }
   }
 
@@ -138,3 +151,20 @@ export default function CreateAccount() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { ['listit.token']: token } = parseCookies(ctx);
+
+  if (token) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {},
+  };
+};
