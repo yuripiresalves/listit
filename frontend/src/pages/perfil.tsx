@@ -12,30 +12,6 @@ import { api } from '@/services/api';
 import { Anime } from '.';
 
 export default function MyProfile() {
-  // const animes = [
-  //   {
-  //     id: 1,
-  //     title: 'Shingeki no Kyojin',
-  //     episodes: 40,
-  //     score: 9.9,
-  //     imageJPG: {
-  //       imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-  //     },
-  //     synopsis:
-  //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Death note',
-  //     episodes: 37,
-  //     score: 10,
-  //     imageJPG: {
-  //       imageURL: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-  //     },
-  //     synopsis:
-  //       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
-  //   },
-  // ];
   const [animes, setAnimes] = useState<Anime[]>([]);
   const { user } = useContext(AuthContext);
 
