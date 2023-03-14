@@ -2,13 +2,11 @@ package br.com.listit.listit.web.rest.api.v1;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,18 +31,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ListAnimeController {
 	private ListAnimeEntityService listAnimeEntityService;
-
-	@PostMapping("/create")
-	@SecurityRequirement(name = "Bearer Authentication")
-	@ApiResponse(responseCode = "201", description = "Created all List anime", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> createAllList() {
-		log.info("tá chamando confia");
-		List<ListAnimeDTO> createAllList = listAnimeEntityService.createAllList();
-
-		return new ResponseEntity<>(createAllList, HttpStatus.CREATED);
-
-	}
 
 	@GetMapping
 	@SecurityRequirement(name = "Bearer Authentication")

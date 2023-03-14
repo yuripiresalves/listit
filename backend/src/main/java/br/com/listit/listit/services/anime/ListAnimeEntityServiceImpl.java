@@ -34,8 +34,8 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	private UserService userService;
 	private UserRepository userRepository;
 
-	public List<ListAnimeDTO> createAllList() {
-		User userCurrent = getUserCurrent();
+	public List<ListAnimeDTO> createAllListFoundUserByUsername(String username) {
+		User userCurrent = userRepository.findByUsername(username).get();
 
 		if (!userCurrent.getListAnime().isEmpty()) {
 			throw new OperationException("user already have lists created");
@@ -45,18 +45,16 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		TypeList[] values = TypeList.values();
 
 		Arrays.stream(values).forEach((type) -> {
-			ListAnimeDTO listCreated = createList(type);
+			ListAnimeDTO listCreated = createList(type, userCurrent);
 			allListsFromUserCurrent.add(listCreated);
 		});
 
 		return allListsFromUserCurrent;
 	}
 
-	@Override
-	public ListAnimeDTO createList(TypeList typeList) {
-		User userCurrent = getUserCurrent();
+	public ListAnimeDTO createList(TypeList typeList, User user) {
 		ListAnimeEntity listAnime = ListAnimeEntity.builder().type(typeList).items(new ArrayList<ItemAnimeEntity>())
-				.user(userCurrent).build();
+				.user(user).build();
 
 		ListAnimeEntity save = listAnimeEntityRepository.save(listAnime);
 
