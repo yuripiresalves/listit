@@ -32,19 +32,7 @@ import lombok.extern.log4j.Log4j2;
 public class ListAnimeController {
 	private ListAnimeEntityService listAnimeEntityService;
 
-	@PostMapping("/create")
-	@SecurityRequirement(name = "Bearer Authentication")
-	@ApiResponse(responseCode = "201", description = "Created all List anime", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> createAllList() {
-		log.info("tá chamando confia");
-		List<ListAnimeDTO> createAllList = listAnimeEntityService.createAllList();
-
-		return new ResponseEntity<>(createAllList, HttpStatus.CREATED);
-
-	}
-
-	@GetMapping("/all")
+	@GetMapping
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "find List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
