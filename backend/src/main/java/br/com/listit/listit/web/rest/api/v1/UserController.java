@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.services.user.UserService;
 import br.com.listit.listit.web.dto.UserDTO;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @CrossOrigin
@@ -26,19 +28,23 @@ import lombok.AllArgsConstructor;
 @Tag(name = "user", description = "manager users")
 @EnableMethodSecurity(prePostEnabled = true)
 @AllArgsConstructor
+@Log4j2
 public class UserController {
 	private UserService userService;
+	private ListAnimeEntityService listAnimeEntityService;
 
 	@ApiResponse(responseCode = "200", description = "create a new User", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)) })
 	@PostMapping("/create")
 	public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 		UserDTO createUser = userService.createUser(userDTO);
+		log.info("username => {}", createUser.getUsername());
+		listAnimeEntityService.createAllListFoundUserByUsername(userDTO.getUsername());
 		return new ResponseEntity<>(createUser, HttpStatus.CREATED);
 	}
 	
 	@SecurityRequirement(name = "Bearer Authentication")
-	@ApiResponse(responseCode = "200", description = "create a new User", content = {
+	@ApiResponse(responseCode = "200", description = "update password User", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
 	@PutMapping("/password")
 	public ResponseEntity<?> updatePasswordUser(@RequestBody String password) {

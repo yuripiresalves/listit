@@ -34,8 +34,8 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	private UserService userService;
 	private UserRepository userRepository;
 
-	public List<ListAnimeDTO> createAllList() {
-		User userCurrent = getUserCurrent();
+	public List<ListAnimeDTO> createAllListFoundUserByUsername(String username) {
+		User userCurrent = userRepository.findByUsername(username).get();
 
 		if (!userCurrent.getListAnime().isEmpty()) {
 			throw new OperationException("user already have lists created");
@@ -45,18 +45,16 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		TypeList[] values = TypeList.values();
 
 		Arrays.stream(values).forEach((type) -> {
-			ListAnimeDTO listCreated = createList(type);
+			ListAnimeDTO listCreated = createList(type, userCurrent);
 			allListsFromUserCurrent.add(listCreated);
 		});
 
 		return allListsFromUserCurrent;
 	}
 
-	@Override
-	public ListAnimeDTO createList(TypeList typeList) {
-		User userCurrent = getUserCurrent();
+	public ListAnimeDTO createList(TypeList typeList, User user) {
 		ListAnimeEntity listAnime = ListAnimeEntity.builder().type(typeList).items(new ArrayList<ItemAnimeEntity>())
-				.user(userCurrent).build();
+				.user(user).build();
 
 		ListAnimeEntity save = listAnimeEntityRepository.save(listAnime);
 
@@ -114,8 +112,10 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 	}
 
 	@Override
-	public void removeItem(int idList, int idAnime) {
-		ListAnimeEntity findListByID = findListByID(idList);
+	public void removeItem(TypeList type, int idAnime) {
+		Optional<ListAnimeEntity> findFirst = getUserCurrent().getListAnime().stream().filter(l -> l.getType().equals(type)).findFirst();
+		
+		ListAnimeEntity findListByID = findFirst.orElseThrow(()-> new OperationException("List Not found"));
 		animeService.findAnimeByID(idAnime);
 
 		if (findListByID.getItems() == null) {
@@ -127,14 +127,6 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		});
 
 		listAnimeEntityRepository.save(findListByID);
-	}
-
-	private ListAnimeEntity findListByID(int id) {
-		Optional<ListAnimeEntity> findById = listAnimeEntityRepository.findById(id);
-		ListAnimeEntity animeList = findById.orElseThrow(() -> {
-			throw new ListAnimeNotFoundException("List anime not found. id = " + id + " not found");
-		});
-		return animeList;
 	}
 
 	private ListAnimeDTO convertListAnimeEntityToListAnimeDTO(ListAnimeEntity listAnimeEntity) {
