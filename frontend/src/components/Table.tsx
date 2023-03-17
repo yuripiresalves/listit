@@ -1,5 +1,6 @@
 import { api } from '@/services/api';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Loading } from './Loading';
 
@@ -31,7 +32,7 @@ export function Table({ listType }: TableProps) {
 
         if (listType == '') {
           setIsLoading(true);
-          response = await api.get(`/lists/all`);
+          response = await api.get(`/lists`);
 
           const animesList = response.data.map((list: List) => {
             return list.items;
@@ -92,7 +93,12 @@ export function Table({ listType }: TableProps) {
               {animes.map((anime) => (
                 <tr key={anime.id}>
                   <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tl-md rounded-bl-md">
-                    {anime.title}
+                    <Link
+                      href={`/anime/${anime.id}`}
+                      className="hover:underline"
+                    >
+                      {anime.title}
+                    </Link>
                   </td>
                   <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
                     {anime.episodes}

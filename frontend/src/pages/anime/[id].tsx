@@ -3,10 +3,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 
 import React, { useContext, useEffect, useState } from 'react';
-import { CaretDown, Check, Star, X } from 'phosphor-react';
+import { X } from 'phosphor-react';
 import { api } from '@/services/api';
 import * as Dialog from '@radix-ui/react-dialog';
-// import { Anime } from '..';
 
 import { GridContainer } from '../../components/GridContainer';
 import { Loading } from '@/components/Loading';
@@ -15,6 +14,7 @@ import { Header } from '@/components/Header';
 import { SelectList } from '@/components/SelectList';
 import { toast } from 'react-toastify';
 import { AuthContext } from '@/contexts/AuthContext';
+import { FavoriteStar } from '@/components/FavoriteStar';
 
 type Anime = {
   id: number;
@@ -43,7 +43,7 @@ export default function AnimeDetails() {
     async function getAnimes() {
       try {
         // setIsLoading(true);
-        const response = await api.get(`/lists/all`);
+        const response = await api.get(`/lists`);
 
         const favoritesAnimes = response.data[3].items;
 
@@ -87,27 +87,11 @@ export default function AnimeDetails() {
         setIsLoading(false);
       }
     }
-    // async function getFavoriteAnimes() {
-    //   try {
-    //     const response = await api.get(`/lists/FAVORITO/${id}`);
-    //     console.log('FAVORITO', response);
-
-    //     const data = await response.data;
-    //     // setAnime(data);
-    //   } catch (error) {
-    //     // setHasError(true);
-    //     console.log('error', error);
-    //   }
-    // }
 
     getAnimeDetails();
     getAnimes();
     // getFavoriteAnimes();
   }, [id]);
-
-  // useEffect(() => {
-
-  // }, [id]);
 
   async function handleAddToList() {
     if (!selectedValue) {
@@ -139,6 +123,7 @@ export default function AnimeDetails() {
           progress: undefined,
           theme: 'colored',
         });
+        router.push('/');
       }
     } catch (error) {
       console.log(error);
@@ -148,10 +133,10 @@ export default function AnimeDetails() {
   async function handleToggleFavorite() {
     if (isFavorite) {
       try {
-        const response = await api.delete(`/lists/55/${id}`);
+        const response = await api.delete(`/lists/FAVORITO/${id}`);
         console.log('response', response);
 
-        if (response.status === 200) {
+        if (response.status === 204) {
           toast('Anime deletado com sucesso', {
             type: 'success',
             position: 'top-center',
@@ -293,16 +278,11 @@ export default function AnimeDetails() {
                           </Dialog.Root>
                         )}
 
-                        <button
-                          onClick={handleToggleFavorite}
-                          className="bg-transparent text-zinc-800 flex items-center h-auto rounded-md"
-                        >
-                          <Star
-                            size={28}
-                            weight={isFavorite ? 'fill' : 'bold'}
-                            className="text-yellow-500"
-                          />
-                        </button>
+                        <FavoriteStar
+                          id={id}
+                          isFavorite={isFavorite}
+                          setIsFavorite={setIsFavorite}
+                        />
                       </div>
                     )}
                   </div>
