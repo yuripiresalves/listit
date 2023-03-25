@@ -8,11 +8,15 @@ import org.springframework.stereotype.Service;
 
 import br.com.listit.listit.domain.dto.AnimeRecord;
 import br.com.listit.listit.domain.dto.ImageJPG;
+import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import net.sandrohc.jikan.model.anime.Anime;
 
 @Service
+@AllArgsConstructor
+@Data
 public class AnimeServiceImpl implements AnimeService {
 	
 	@Autowired
@@ -28,12 +32,20 @@ public class AnimeServiceImpl implements AnimeService {
 	public AnimeRecord findAnimeByID(int id) {
 		Anime searchById = clientRemoteApiJikan.searchById(id);
 		
+		if(searchById == null) {
+			throw new BadRequestClientServiceException("Erro anime not found");
+		}
+		
 		return convertAnimeToAnimeRecordEntity(searchById);
 	}
 
 	private AnimeRecord convertAnimeToAnimeRecordEntity(Anime anime) {
-		ImageJPG imageJpgConverted = convertImageJPGToImageEntity(anime.getImages().jpg);
+		ImageJPG imageJpgConverted = null;
 		
+		if(anime.getImages()!=null) {
+			imageJpgConverted = convertImageJPGToImageEntity(anime.getImages().jpg);
+		}
+		 
 		return AnimeRecord.builder()
 				.id(anime.getMalId())
 				.title(anime.getTitle())
