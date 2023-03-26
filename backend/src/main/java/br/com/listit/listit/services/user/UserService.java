@@ -3,11 +3,12 @@ package br.com.listit.listit.services.user;
 import java.util.Optional;
 
 import br.com.listit.listit.domain.entity.User;
+import br.com.listit.listit.web.dto.CreatedUserDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 
 public interface UserService {
 	
-	UserDTO createUser(UserDTO userDTO);
+	UserDTO createUser(CreatedUserDTO userDTO);
 	
 	UserDTO login(String username, String password);
 	

@@ -34,6 +34,7 @@ public class User {
 	@Column(unique = true)
 	private String username;
 	
+	@Column(nullable = true)
 	private String password;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
