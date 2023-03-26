@@ -25,7 +25,6 @@ import lombok.extern.log4j.Log4j2;
 
 @Service
 @AllArgsConstructor
-@Log4j2
 public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 
 	private ListAnimeEntityRepository listAnimeEntityRepository;
@@ -102,8 +101,13 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		}
 
 		ItemAnimeEntity item = ItemAnimeEntity.builder().dateOfEntry(LocalDate.now()).idAnime(idAnime).build();
+		
+		if(findListByID.getItems().contains(item)) {
+			throw new OperationException("anime is already in the list");
+		}else {
+			findListByID.getItems().add(item);
+		}
 
-		findListByID.getItems().add(item);
 
 		ListAnimeEntity save = listAnimeEntityRepository.save(findListByID);
 

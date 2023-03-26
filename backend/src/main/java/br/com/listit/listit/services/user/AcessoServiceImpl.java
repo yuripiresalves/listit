@@ -54,7 +54,8 @@ public class AcessoServiceImpl implements AcessoService {
 	
 	@Lazy
 	private ListAnimeEntityService listAnimeEntityService;
-
+	
+	@Lazy
 	private TokenUtil tokenUtil;
 	
 	private static String idClientGoogle;
