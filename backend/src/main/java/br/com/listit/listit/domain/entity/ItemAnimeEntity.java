@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -18,11 +19,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ItemAnimeEntity {
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
 	private LocalDate dateOfEntry;
 	
+	@EqualsAndHashCode.Include
 	private int idAnime;
 }

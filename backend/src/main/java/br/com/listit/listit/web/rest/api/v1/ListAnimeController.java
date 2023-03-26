@@ -80,7 +80,7 @@ public class ListAnimeController {
 	@SecurityRequirement(name = "Bearer Authentication")
 	@ApiResponse(responseCode = "200", description = "remove anime in List anime by id", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = ListAnimeDTO.class)) })
-	public ResponseEntity<?> removeItem(@PathVariable("type") String type, int idAnime) {
+	public ResponseEntity<?> removeItem(@PathVariable("type") String type, @PathVariable("idAnime") int idAnime) {
 		listAnimeEntityService.removeItem(getTypeListFromString(type), idAnime);
 		return ResponseEntity.noContent().build();
 	}
