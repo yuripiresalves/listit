@@ -1,5 +1,7 @@
 package br.com.listit.listit.web.rest.api.v1;
 
+import java.io.IOException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,7 @@ import lombok.AllArgsConstructor;
 @CrossOrigin
 @RequestMapping("/api/authenticate")
 @Tag(name = "login", description = "login users")
-@AllArgsConstructor
+@AllArgsConstructor	
 public class LoginController {
 	private AcessoService acessoService;
 
@@ -41,7 +43,24 @@ public class LoginController {
 		return response;
 	}
 
+	@ApiResponse(responseCode = "200", description = "login", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)) })
+	@PostMapping("/login/google")
+	public ResponseEntity<?> loginGoogle(@RequestBody Credential credential) throws IOException {
+		TokenJwtDTO tokenGenerated = acessoService.authenticateGoogle(credential.token());
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.set("token", tokenGenerated.getToken());
+
+		ResponseEntity<TokenJwtDTO> response = new ResponseEntity<>(tokenGenerated, responseHeaders,
+				HttpStatus.OK);
+		return response;
+	}
+
+	
 	public record Login(String username, String password) {
+	}
+	
+	public record Credential(String token) {
 	}
 
 }

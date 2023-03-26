@@ -7,6 +7,8 @@ import br.com.listit.listit.web.dto.TokenJwtDTO;
 
 public interface AcessoService extends UserDetailsService {
 	void authenticate(String username, String password);
+	
+	TokenJwtDTO authenticateGoogle(String tokenUser);
 
 	String generateToken(UserDetails userDetails);
 

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
+import br.com.listit.listit.web.dto.CreatedUserDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
 
@@ -22,10 +23,13 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public UserDTO createUser(UserDTO userDTO) {
-		User convertUSerDtoToUserEntity = convertUSerDtoToUserEntity(userDTO);
-
-		convertUSerDtoToUserEntity.setPassword(passwordEncoder.encode(convertUSerDtoToUserEntity.getPassword()));
+	public UserDTO createUser(CreatedUserDTO userDTO) {
+		User convertUSerDtoToUserEntity = convertUserDtoToUserEntity(userDTO);
+		String password = convertUSerDtoToUserEntity.getPassword();
+		
+		if(password != null) {
+			convertUSerDtoToUserEntity.setPassword(password);
+		}
 
 		User user = userRepository.save(convertUSerDtoToUserEntity);
 		return convertUserEntityToUSerDto(user);
@@ -102,7 +106,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUsername(userDetails.getUsername());
 	}
 
-	private User convertUSerDtoToUserEntity(UserDTO dto) {
+	private User convertUserDtoToUserEntity(CreatedUserDTO dto) {
 		return User.builder().email(dto.getEmail()).name(dto.getName()).viewProfile(dto.isViewProfile()).password(dto.getPassword())
 				.username(dto.getUsername()).description(dto.getDescription()).build();
 	}
