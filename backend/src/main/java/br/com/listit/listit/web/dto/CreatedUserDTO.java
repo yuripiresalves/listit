@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class UserDTO {
+public class CreatedUserDTO {
 
 	private String name;
 	
@@ -18,6 +18,8 @@ public class UserDTO {
 	private String username;
 
 	private boolean viewProfile;
+	
+	private String password;
 	
 	private String description;
 }

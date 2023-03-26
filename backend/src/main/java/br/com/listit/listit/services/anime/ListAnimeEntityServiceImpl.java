@@ -13,7 +13,6 @@ import br.com.listit.listit.domain.entity.ItemAnimeEntity;
 import br.com.listit.listit.domain.entity.ListAnimeEntity;
 import br.com.listit.listit.domain.entity.TypeList;
 import br.com.listit.listit.domain.entity.User;
-import br.com.listit.listit.exception.ListAnimeNotFoundException;
 import br.com.listit.listit.exception.OperationException;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.ListAnimeEntityRepository;
