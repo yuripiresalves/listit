@@ -2,12 +2,68 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
+import * as Switch from '@radix-ui/react-switch';
 import { parseCookies } from 'nookies';
 
 import { GridContainer } from '../components/GridContainer';
 import { Header } from '../components/Header';
+import { FormEvent, useContext, useState } from 'react';
+import { AuthContext } from '@/contexts/AuthContext';
+import { api } from '@/services/api';
+import { toast } from 'react-toastify';
 
 export default function Settings() {
+  const { user } = useContext(AuthContext);
+
+  const isPublicProfile = user?.viewProfile;
+
+  const [viewProfile, setViewProfile] = useState(isPublicProfile);
+  const [bio, setBio] = useState(user?.description);
+
+  async function handleViewProfile() {
+    if (viewProfile) {
+      await api.put('/users/profile/view/desability');
+      setViewProfile(false);
+    } else {
+      await api.put('/users/profile/view/active');
+      setViewProfile(true);
+    }
+  }
+
+  async function handleUpdateProfile(e: FormEvent) {
+    try {
+      e.preventDefault();
+      await api.put('/users/description', {
+        description: bio,
+      });
+      toast('Perfil atualizado com sucesso', {
+        type: 'success',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    } catch (error) {
+      console.log(error);
+
+      toast('Erro ao atualizar perfil', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen max-h-screen">
       <Head>
@@ -60,6 +116,44 @@ export default function Settings() {
                 <h2 className="text-2xl font-bold text-zinc-900 mb-4">
                   Informações pessoais
                 </h2>
+                <form
+                  className="flex flex-col gap-4 w-1/2"
+                  onSubmit={handleUpdateProfile}
+                >
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="bio">Biografia</label>
+                    <textarea
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      placeholder="Escreva uma breve biografia sobre você"
+                      cols={30}
+                      rows={5}
+                      className="rounded-md p-4 resize-none"
+                    ></textarea>
+                  </div>
+
+                  {/* <div className="flex flex-col gap-2">
+                    <label htmlFor="password">Senha</label>
+                    <input
+                      
+                      type="password"
+                      className="rounded-md p-4"
+                    />
+                  </div> */}
+
+                  {/* <div className="flex flex-col gap-2">
+                    <label htmlFor="password">Confirmar senha</label>
+                    <input
+                      type="password"
+                      name="password"
+                      id="password"
+                      className="rounded-md p-4"
+                    />
+                  </div> */}
+                  <button className="bg-emerald-600 text-zinc-100 font-bold p-4 rounded-md w-24 self-end hover:bg-emerald-700 transition-colors">
+                    Salvar
+                  </button>
+                </form>
               </div>
             </Tabs.Content>
 
@@ -68,6 +162,23 @@ export default function Settings() {
                 <h2 className="text-2xl font-bold text-zinc-900 mb-4">
                   Privacidade
                 </h2>
+                <div
+                  className="flex items-center"
+                  onClick={() => handleViewProfile()}
+                >
+                  <label className="cursor-pointer pr-4">
+                    Permitir que outros usuários visualizem meu perfil
+                  </label>
+                  <Switch.Root
+                    data-state={viewProfile ? 'checked' : ''}
+                    className="w-12 h-7 bg-zinc-400 rounded-full relative data-[state='checked']:bg-emerald-800"
+                  >
+                    <Switch.Thumb
+                      data-state={viewProfile ? 'checked' : ''}
+                      className="w-6 h-6 block rounded-full bg-zinc-100 translate-x-1 data-[state='checked']:translate-x-5 transition-transform"
+                    />
+                  </Switch.Root>
+                </div>
               </div>
             </Tabs.Content>
 

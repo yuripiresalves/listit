@@ -8,6 +8,8 @@ type User = {
   email: string;
   username: string;
   avatar_url: string;
+  viewProfile: boolean;
+  description: string;
 };
 
 type SignInCredentials = {

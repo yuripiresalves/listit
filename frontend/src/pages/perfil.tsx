@@ -54,10 +54,7 @@ export default function MyProfile() {
               <span className="text-gray-400 text-sm">@{user?.username}</span>
             </p>
             <p className="pt-4 mx-auto text-left w-full md-max-h-36 md:max-w-4xl max-w-xl bg-transparent">
-              LIMITAR A 320 CARACTERES oi e tryre u soi eu sou o yuri. oitrtrewr
-              eu sou o yuri. tretew rtwew trete gerteytyy yweyewywywf 7845nr8e
-              r3472398 ii oi eu sou o yuri. oi eu sofndsj fkdsfsffdfd fdgfgfdgfd
-              fgfdgffhfhgfgerr eoghret y4389y LIMITAR A 320 CARACTERES
+              {user?.description}
             </p>
           </div>
           <section className="pb-4 w-full">

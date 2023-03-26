@@ -1,8 +1,12 @@
 import { api } from '@/services/api';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { Gear, Trash, X } from 'phosphor-react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
 import { Loading } from './Loading';
+import { SelectList } from '@/components/SelectList';
+import { AddToListButton } from './AddToListButton';
 
 interface TableProps {
   listType: '' | 'ASSISTINDO' | 'FINALIZADO' | 'PARA_ASSISTIR' | 'FAVORITO';
@@ -110,7 +114,11 @@ export function Table({ listType }: TableProps) {
                     10/10/2021
                   </td>
                   <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tr-md rounded-br-md">
-                    Opções
+                    <AddToListButton
+                      animeId={anime.id}
+                      listType={listType}
+                      icon={true}
+                    />
                   </td>
                 </tr>
               ))}

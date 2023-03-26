@@ -6,9 +6,15 @@ import { api } from '@/services/api';
 interface SelectListProps {
   // selectedValue: string | null;
   setSelectedValue: (value: string | null) => void;
+  listType?: string;
+  selectedValue?: string | null;
 }
 
-export function SelectList({ setSelectedValue }: SelectListProps) {
+export function SelectList({
+  setSelectedValue,
+  selectedValue,
+  listType,
+}: SelectListProps) {
   const [listTypes, setListTypes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -24,12 +30,23 @@ export function SelectList({ setSelectedValue }: SelectListProps) {
   }, []);
 
   return (
-    <Select.Root onValueChange={(newValue) => setSelectedValue(newValue)}>
+    <Select.Root
+      //   defaultValue={
+      //     listType ? listType : selectedValue ? listTypes[selectedValue] : 'nada'
+      //   }
+      onValueChange={(newValue) => setSelectedValue(newValue)}
+    >
       <Select.Trigger
         aria-label="listas"
         className="bg-zinc-100 border border-emerald-600 flex items-center justify-between gap-2 p-3 rounded-md text-emerald-600 w-1/2"
       >
-        <Select.Value placeholder="Selecione a lista" />
+        <Select.Value>
+          {selectedValue
+            ? listTypes[selectedValue]
+            : listType
+            ? listTypes.find((type) => type === listType)
+            : 'Selecione a lista'}
+        </Select.Value>
         <Select.Icon>
           <CaretDown />
         </Select.Icon>
@@ -47,6 +64,7 @@ export function SelectList({ setSelectedValue }: SelectListProps) {
                 <Select.ItemIndicator className="absolute left-1">
                   <Check />
                 </Select.ItemIndicator>
+
                 <Select.ItemText>
                   {type === 'ASSISTINDO'
                     ? 'Assistindo'
