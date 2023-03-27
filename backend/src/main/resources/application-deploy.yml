@@ -9,8 +9,6 @@ spring:
     url: jdbc:postgresql://dpg-cggv0agrjent5o4ri2ng-a.oregon-postgres.render.com:5432/listit_zyed
     username: listit
     password: jSGWfNt3oI1ebV6z5pxm2FyphThNinMw
-    testWhileIdle: true
-    validationQuery: SELECT 1
   jpa:
     hibernate:
       ddl-auto: none
