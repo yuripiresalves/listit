@@ -34,11 +34,9 @@ import br.com.listit.listit.web.dto.TokenJwtDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import br.com.listit.listit.web.security.token.TokenUtil;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @AllArgsConstructor
-@Log4j2
 public class AcessoServiceImpl implements AcessoService {
 	@Lazy
 	private ListItUserDetailsService userDetailsServiceImpl;
@@ -58,7 +56,8 @@ public class AcessoServiceImpl implements AcessoService {
 	@Lazy
 	private TokenUtil tokenUtil;
 	
-
+	private static String idClientGoogle;
+	
 	@Override
 	public TokenJwtDTO authenticateAndGenerateToken(String username, String password) {
 		authenticate(username, password);
@@ -89,7 +88,7 @@ public class AcessoServiceImpl implements AcessoService {
 	}
 	
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).description(user.getDescription()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).urlImage(user.getUrlImage()).description(user.getDescription()).build();
 	}
 
 	@Override
@@ -104,7 +103,8 @@ public class AcessoServiceImpl implements AcessoService {
 	@Override
 	public TokenJwtDTO authenticateGoogle(String tokenUser) {
 		String jwt = tokenUser;
-		GoogleIdTokenVerifier verifier = new GoogleVerifySingleton().getGoogleIdTokenVerifier();
+		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+				.setAudience(Collections.singletonList(idClientGoogle)).build();
 
 		GoogleIdToken idToken;
 
@@ -140,6 +140,7 @@ public class AcessoServiceImpl implements AcessoService {
 		 return  CreatedUserDTO.builder()
 				.email(payload.getEmail())
 				.name(payload.get("name").toString())
+				.urlImage(payload.get("picture").toString())
 				.viewProfile(true)
 				.username(payload.getEmail())
 				.build();
@@ -158,7 +159,9 @@ public class AcessoServiceImpl implements AcessoService {
 		return token;
 	}
 
-
-	
+	@Value("${google.id-cliente}")
+	private void setIdClientGoogle(String idClientGoogle) {
+		AcessoServiceImpl.idClientGoogle = idClientGoogle;
+	}
 	
 }

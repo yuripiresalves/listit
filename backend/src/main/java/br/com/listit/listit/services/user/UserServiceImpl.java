@@ -108,11 +108,11 @@ public class UserServiceImpl implements UserService {
 
 	private User convertUserDtoToUserEntity(CreatedUserDTO dto) {
 		return User.builder().email(dto.getEmail()).name(dto.getName()).viewProfile(dto.isViewProfile()).password(dto.getPassword())
-				.username(dto.getUsername()).description(dto.getDescription()).build();
+				.username(dto.getUsername()).description(dto.getDescription()).urlImage(dto.getUrlImage()).build();
 	}
 
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).viewProfile(user.isViewProfile()).description(user.getDescription()).username(user.getUsername()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).viewProfile(user.isViewProfile()).urlImage(user.getUrlImage()).description(user.getDescription()).username(user.getUsername()).build();
 	}
 
 	@Override

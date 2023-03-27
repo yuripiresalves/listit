@@ -37,6 +37,9 @@ public class User {
 	@Column(nullable = true)
 	private String password;
 	
+	@Column(nullable = true)
+	private String urlImage;
+	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
 	private List<ListAnimeEntity> listAnime;
 	
