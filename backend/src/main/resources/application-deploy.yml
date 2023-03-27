@@ -11,7 +11,7 @@ spring:
     password: jSGWfNt3oI1ebV6z5pxm2FyphThNinMw
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false

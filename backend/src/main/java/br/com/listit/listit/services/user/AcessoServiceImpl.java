@@ -58,7 +58,6 @@ public class AcessoServiceImpl implements AcessoService {
 	@Lazy
 	private TokenUtil tokenUtil;
 	
-	private static String idClientGoogle;
 
 	@Override
 	public TokenJwtDTO authenticateAndGenerateToken(String username, String password) {
@@ -105,8 +104,7 @@ public class AcessoServiceImpl implements AcessoService {
 	@Override
 	public TokenJwtDTO authenticateGoogle(String tokenUser) {
 		String jwt = tokenUser;
-		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-				.setAudience(Collections.singletonList(idClientGoogle)).build();
+		GoogleIdTokenVerifier verifier = new GoogleVerifySingleton().getGoogleIdTokenVerifier();
 
 		GoogleIdToken idToken;
 
@@ -160,14 +158,7 @@ public class AcessoServiceImpl implements AcessoService {
 		return token;
 	}
 
-	public static String getIdClientGoogle() {
-		return idClientGoogle;
-	}
 
-	@Value("${google.id-cliente}")
-	private void setIdClientGoogle(String idClientGoogle) {
-		AcessoServiceImpl.idClientGoogle = idClientGoogle;
-	}
 	
 	
 }
