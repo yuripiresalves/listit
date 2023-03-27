@@ -54,6 +54,17 @@ export function AddToListButton({
       }
     } catch (error) {
       console.log(error);
+      toast('Erro ao adicionar anime', {
+        type: 'error',
+        position: 'top-center',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
     }
   }
 
@@ -61,7 +72,9 @@ export function AddToListButton({
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <button
-          className="max-w-xs bg-transparent border border-emerald-600 p-3 rounded-md text-emerald-800 text-lg font-bold hover:bg-emerald-600 hover:text-zinc-100 transition duration-300"
+          className={`max-w-xs bg-transparent border border-emerald-600 ${
+            icon ? 'p-2' : 'p-3'
+          } rounded-md text-emerald-800 text-lg font-bold hover:bg-emerald-600 hover:text-zinc-100 transition duration-300`}
           type="button"
         >
           {icon ? <Gear size={24} /> : 'Adicionar a lista'}

@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
+import { getSession, signIn } from 'next-auth/react';
 
 type User = {
   name: string;
@@ -20,7 +21,8 @@ type SignInCredentials = {
 type AuthContextType = {
   isAuthenticaded: boolean;
   user: User | null;
-  signIn: (credentials: SignInCredentials) => Promise<void>;
+  signInWithCredentials: (credentials: SignInCredentials) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => void;
 };
 
@@ -51,7 +53,10 @@ export function AuthProvider({ children }: any) {
     }
   }, []);
 
-  async function signIn({ username, password }: SignInCredentials) {
+  async function signInWithCredentials({
+    username,
+    password,
+  }: SignInCredentials) {
     const { data } = await api.post('/authenticate/login', {
       username,
       password,
@@ -67,6 +72,17 @@ export function AuthProvider({ children }: any) {
     router.push('/');
   }
 
+  async function signInWithGoogle() {
+    console.log('oi');
+
+    try {
+      const response = await signIn('google');
+      console.log('to aqui na response', response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function signOut() {
     setUser(null);
     setCookie(undefined, 'listit.token', '', {
@@ -76,7 +92,15 @@ export function AuthProvider({ children }: any) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticaded, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticaded,
+        signInWithCredentials,
+        signInWithGoogle,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

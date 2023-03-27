@@ -132,24 +132,6 @@ export default function Settings() {
                     ></textarea>
                   </div>
 
-                  {/* <div className="flex flex-col gap-2">
-                    <label htmlFor="password">Senha</label>
-                    <input
-                      
-                      type="password"
-                      className="rounded-md p-4"
-                    />
-                  </div> */}
-
-                  {/* <div className="flex flex-col gap-2">
-                    <label htmlFor="password">Confirmar senha</label>
-                    <input
-                      type="password"
-                      name="password"
-                      id="password"
-                      className="rounded-md p-4"
-                    />
-                  </div> */}
                   <button className="bg-emerald-600 text-zinc-100 font-bold p-4 rounded-md w-24 self-end hover:bg-emerald-700 transition-colors">
                     Salvar
                   </button>

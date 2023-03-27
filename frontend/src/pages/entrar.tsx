@@ -8,14 +8,15 @@ import { GoogleLogo } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 import { toast } from 'react-toastify';
+import { getSession, signIn } from 'next-auth/react';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
+  const { signInWithCredentials, signInWithGoogle } = useContext(AuthContext);
 
   async function handleSignIn(data: any) {
     try {
-      await signIn(data);
+      await signInWithCredentials(data);
     } catch (error) {
       console.log(error);
       toast('Email ou senha incorretos', {
@@ -82,7 +83,10 @@ export default function Login() {
               Esqueci minha senha
             </Link>
             <span className="text-center mb-4 text-zinc-600 border-t border-zinc-300"></span>
-            <button className="bg-rose-800 p-4 rounded-md flex justify-center items-center gap-4 text-zinc-200 font-bold text-xl hover:bg-rose-900 transition-colors">
+            <button
+              onClick={signInWithGoogle}
+              className="bg-rose-800 p-4 rounded-md flex justify-center items-center gap-4 text-zinc-200 font-bold text-xl hover:bg-rose-900 transition-colors"
+            >
               <GoogleLogo size={28} weight="bold" />
               Entrar com Google
             </button>
@@ -104,6 +108,7 @@ export default function Login() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { ['listit.token']: token } = parseCookies(ctx);
+  // const session = await getSession(ctx);
 
   if (token) {
     return {
