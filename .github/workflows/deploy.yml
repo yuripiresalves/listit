@@ -34,6 +34,11 @@ jobs:
       - name: Test with Gradle Wrapper
         working-directory: ./backend
         run: ./gradlew clean build test
+      - name: Deploy in Render
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.some-render-service-id }}
+          api-key: ${{ secrets.render-api-key }}
 
 
     
