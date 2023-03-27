@@ -22,4 +22,6 @@ public class CreatedUserDTO {
 	private String password;
 	
 	private String description;
+
+	private String urlImage;
 }
