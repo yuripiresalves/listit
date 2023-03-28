@@ -14,7 +14,7 @@ export function AsideBanner() {
         <Image
           src={AppPreviewImg}
           alt="Imagem mostrando o app Listit em um celular, notebook e tablet"
-          width={600}
+          width={700}
           priority
           quality={100}
           className=" 2xl:w-full"

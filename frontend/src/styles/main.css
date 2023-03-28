@@ -21,3 +21,20 @@ a {
 body {
   -webkit-font-smoothing: antialiased;
 }
+
+/* Definir a largura e cor da barra de rolagem */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+  background-color: #e4e4e7;
+}
+
+/* Definir a cor da thumb da barra de rolagem */
+::-webkit-scrollbar-thumb {
+  background-color: #047857;
+}
+
+/* Definir a cor do hover da thumb da barra de rolagem */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #065f46;
+}

@@ -1,13 +1,36 @@
 import { Anime } from '@/pages';
+import { api } from '@/services/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star } from 'phosphor-react';
+import { useEffect, useState } from 'react';
+import { FavoriteStar } from './FavoriteStar';
 
 interface AnimeCardProps {
   anime: Anime;
 }
 
 export function AnimeCard({ anime }: AnimeCardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    async function getFavoriteAnimes() {
+      try {
+        const response = await api.get(`/lists/FAVORITO`);
+
+        const favoritesAnimes = response.data.items;
+
+        const isFavorite = favoritesAnimes.find((favoriteAnime: Anime) => {
+          return favoriteAnime.id === Number(anime.id);
+        });
+
+        setIsFavorite(isFavorite);
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+    getFavoriteAnimes();
+  }, [anime.id]);
+
   return (
     <div className="flex border flex-1 gap-8 justify-between bg-zinc-100 p-4 rounded-md">
       <Link
@@ -39,9 +62,12 @@ export function AnimeCard({ anime }: AnimeCardProps) {
           >
             Ver mais
           </Link>
-          <button className="bg-transparent text-zinc-800 flex items-center gap-2 p-2 rounded-md">
-            <Star size={28} weight="bold" className="text-yellow-500" />
-          </button>
+
+          <FavoriteStar
+            id={anime.id}
+            isFavorite={isFavorite}
+            setIsFavorite={setIsFavorite}
+          />
         </div>
       </div>
     </div>

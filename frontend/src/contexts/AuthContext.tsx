@@ -7,18 +7,22 @@ type User = {
   name: string;
   email: string;
   username: string;
-  avatar_url: string;
+  viewProfile: boolean;
+  description: string;
+  urlImage: string;
 };
 
 type SignInCredentials = {
-  email: string;
+  username: string;
   password: string;
 };
 
 type AuthContextType = {
   isAuthenticaded: boolean;
   user: User | null;
-  signIn: (credentials: SignInCredentials) => Promise<void>;
+  setUser: (user: User) => void;
+  signInWithCredentials: (credentials: SignInCredentials) => Promise<void>;
+  signInWithGoogle: (credentialResponse: any) => Promise<void>;
   signOut: () => void;
 };
 
@@ -26,6 +30,7 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
+
   const router = useRouter();
 
   const isAuthenticaded = !!user;
@@ -49,9 +54,12 @@ export function AuthProvider({ children }: any) {
     }
   }, []);
 
-  async function signIn({ email, password }: SignInCredentials) {
+  async function signInWithCredentials({
+    username,
+    password,
+  }: SignInCredentials) {
     const { data } = await api.post('/authenticate/login', {
-      username: email,
+      username,
       password,
     });
 
@@ -65,6 +73,26 @@ export function AuthProvider({ children }: any) {
     router.push('/');
   }
 
+  async function signInWithGoogle(credentialResponse: any) {
+    try {
+      const { data } = await api.post('/authenticate/login/google', {
+        token: credentialResponse.credential,
+      });
+
+      setCookie(undefined, 'listit.token', data.token, {
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+      console.log(data);
+      setUser(data.userDTO);
+
+      router.push('/');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function signOut() {
     setUser(null);
     setCookie(undefined, 'listit.token', '', {
@@ -74,7 +102,16 @@ export function AuthProvider({ children }: any) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticaded, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        isAuthenticaded,
+        signInWithCredentials,
+        signInWithGoogle,
+        signOut,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

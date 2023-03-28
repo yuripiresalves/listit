@@ -8,14 +8,15 @@ import { GoogleLogo } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 import { toast } from 'react-toastify';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
+  const { signInWithCredentials, signInWithGoogle } = useContext(AuthContext);
 
   async function handleSignIn(data: any) {
     try {
-      await signIn(data);
+      await signInWithCredentials(data);
     } catch (error) {
       console.log(error);
       toast('Email ou senha incorretos', {
@@ -55,9 +56,9 @@ export default function Login() {
                 Olá 👋, <span className="block">entre em sua conta</span>
               </h2>
               <input
-                {...register('email')}
+                {...register('username')}
                 type="text"
-                placeholder="fulano@email.com"
+                placeholder="nome de usuário"
                 className=" p-4 rounded-md"
                 required
               />
@@ -75,18 +76,45 @@ export default function Login() {
                 Entrar
               </button>
             </form>
-            <Link
+            {/* <Link
               href="esqueci-senha"
               className="self-end my-2 text-sm hover:underline"
             >
               Esqueci minha senha
-            </Link>
-            <span className="text-center mb-4 text-zinc-600 border-t border-zinc-300"></span>
-            <button className="bg-rose-800 p-4 rounded-md flex justify-center items-center gap-4 text-zinc-200 font-bold text-xl hover:bg-rose-900 transition-colors">
+            </Link> */}
+            {/* <span className="text-center my-4 text-zinc-600 border-b border-zinc-300"></span> */}
+            <div className="relative my-4 mx-12">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="w-full border-t border-zinc-400"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="px-4 bg-zinc-200 text-sm text-zinc-600">
+                  ou
+                </span>
+              </div>
+            </div>
+            {/* <button
+              onClick={signInWithGoogle}
+              className="bg-rose-800 p-4 rounded-md flex justify-center items-center gap-4 text-zinc-200 font-bold text-xl hover:bg-rose-900 transition-colors"
+            >
               <GoogleLogo size={28} weight="bold" />
               Entrar com Google
-            </button>
-            <span className="self-end mt-2 text-sm">
+            </button> */}
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  signInWithGoogle(credentialResponse);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />
+            </div>
+
+            <span className="self-center mt-2 text-sm">
               Ainda não possui uma conta?{' '}
               <Link
                 href="/criar-conta"

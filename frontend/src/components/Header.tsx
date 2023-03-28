@@ -25,9 +25,12 @@ export function Header() {
             <NavigationMenu.List>
               <NavigationMenu.Item>
                 <NavigationMenu.Trigger className="group flex items-center gap-4 cursor-pointer">
-                  <strong>{user.name}</strong>
+                  <strong>{user?.name}</strong>
                   <Image
-                    src="https://i.pravatar.cc/50"
+                    src={
+                      user?.urlImage ||
+                      `https://eu.ui-avatars.com/api/?name=${user?.name}&size=250`
+                    }
                     alt=""
                     width={50}
                     height={50}
