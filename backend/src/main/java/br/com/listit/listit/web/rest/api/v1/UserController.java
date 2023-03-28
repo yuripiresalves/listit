@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.services.user.UserService;
-import br.com.listit.listit.web.dto.CreatedUserDTO;
+import br.com.listit.listit.web.dto.UserAllFieldsDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,7 +36,7 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "create a new User", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)) })
 	@PostMapping("/create")
-	public ResponseEntity<?> createUser(@RequestBody CreatedUserDTO userDTO) {
+	public ResponseEntity<?> createUser(@RequestBody UserAllFieldsDTO userDTO) {
 		UserDTO createUser = userService.createUser(userDTO);
 		listAnimeEntityService.createAllListFoundUserByUsername(userDTO.getUsername());
 		return new ResponseEntity<>(createUser, HttpStatus.CREATED);
@@ -47,6 +48,15 @@ public class UserController {
 	@PutMapping("/password")
 	public ResponseEntity<?> updatePasswordUser(@RequestBody String password) {
 		userService.updatePasswordUserCurrent(password);
+		return ResponseEntity.ok().build();
+	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "200", description = "update password User", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@PutMapping("/all/{username}")
+	public ResponseEntity<?> updateUser(@RequestBody UserAllFieldsDTO userAllFieldsDTO, @PathVariable("username") String username) {
+		userService.updateUser(username, userAllFieldsDTO);
 		return ResponseEntity.ok().build();
 	}
 

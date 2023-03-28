@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class CreatedUserDTO {
+public class UserAllFieldsDTO {
 
 	private String name;
 	
