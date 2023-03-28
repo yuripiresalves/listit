@@ -2,8 +2,6 @@ import { createContext, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
-import { getSession, signIn, useSession } from 'next-auth/react';
-import { GoogleLogin } from '@react-oauth/google';
 
 type User = {
   name: string;
@@ -32,7 +30,6 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
-  // const { data: session } = useSession();
 
   const router = useRouter();
 
@@ -78,7 +75,6 @@ export function AuthProvider({ children }: any) {
 
   async function signInWithGoogle(credentialResponse: any) {
     try {
-      // await signIn('google');
       const { data } = await api.post('/authenticate/login/google', {
         token: credentialResponse.credential,
       });
@@ -90,18 +86,8 @@ export function AuthProvider({ children }: any) {
       api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
 
       setUser(data.userDTO);
-      router.push('/');
-      // <GoogleLogin
-      //   onSuccess={async (credentialResponse) => {
-      //     console.log(credentialResponse);
 
-      //   }}
-      //   onError={() => {
-      //     console.log('Login Failed');
-      //   }}
-      // />;
-      // console.log(user);
-      // // router.push('/');
+      router.push('/');
     } catch (error) {
       console.log(error);
     }

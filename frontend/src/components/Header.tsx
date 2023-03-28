@@ -9,13 +9,9 @@ import { GridContainer } from './GridContainer';
 import { Logo } from './Logo';
 import { useContext } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
-import { useSession } from 'next-auth/react';
 
 export function Header() {
   const { user, signOut } = useContext(AuthContext);
-  // const oi = useSession();
-  const { data: session } = useSession();
-  // console.log(`aaaa`, oi);
 
   return (
     <header className="py-4 bg-emerald-800 w-full">

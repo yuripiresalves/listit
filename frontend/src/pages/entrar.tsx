@@ -8,7 +8,6 @@ import { GoogleLogo } from 'phosphor-react';
 import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 import { toast } from 'react-toastify';
-import { getSession, signIn } from 'next-auth/react';
 import { GoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
@@ -118,7 +117,6 @@ export default function Login() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const { ['listit.token']: token } = parseCookies(ctx);
-  // const session = await getSession(ctx);
 
   if (token) {
     return {
