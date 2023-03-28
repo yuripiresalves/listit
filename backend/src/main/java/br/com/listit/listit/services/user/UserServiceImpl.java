@@ -133,6 +133,13 @@ public class UserServiceImpl implements UserService {
 		return convertUserEntityToUSerDto(user);
 	}
 
+	@Override
+	public void deleteUserCurrent() {
+		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
+		
+		userRepository.deleteById(user.getId());
+	}
+
 
 
 }

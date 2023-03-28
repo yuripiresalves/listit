@@ -25,5 +25,7 @@ public interface UserService {
 	void updateDesciption(String description);
 	
 	void updateUser(String username , UserAllFieldsDTO userDTO);
+	
+	void deleteUserCurrent();
 
 }
