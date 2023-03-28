@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,8 +92,20 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "set description User", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
 	@PutMapping("/description")
-	public ResponseEntity<?> description(@RequestBody String description) {
-		 userService.updateDesciption(description);
+	public ResponseEntity<?> description(@RequestBody Description description) {
+		 userService.updateDesciption(description.description);
 		return ResponseEntity.ok().build();
 	}
+	
+	@SecurityRequirement(name = "Bearer Authentication")
+	@ApiResponse(responseCode = "204", description = "delete user current", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = Void.class)) })
+	@DeleteMapping()
+	public ResponseEntity<?> delete() {
+		 userService.deleteUserCurrent();
+		return ResponseEntity.ok().build();
+	}
+	
+	public record Description(String description) {
+	} 
 }
