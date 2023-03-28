@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Builder
-public class CreatedUserDTO {
+public class UserAllFieldsDTO {
 
 	private String name;
 	
@@ -22,4 +22,6 @@ public class CreatedUserDTO {
 	private String password;
 	
 	private String description;
+
+	private String urlImage;
 }

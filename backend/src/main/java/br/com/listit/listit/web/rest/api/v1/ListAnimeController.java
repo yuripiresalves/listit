@@ -21,14 +21,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/lists")
 @Tag(name = "list", description = "manager lists")
 @AllArgsConstructor
-@Log4j2
 public class ListAnimeController {
 	private ListAnimeEntityService listAnimeEntityService;
 

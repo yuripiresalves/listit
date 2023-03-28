@@ -29,16 +29,14 @@ import br.com.listit.listit.exception.BadCredentialsCustomException;
 import br.com.listit.listit.exception.UserDisabledException;
 import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.services.user.security.ListItUserDetailsService;
-import br.com.listit.listit.web.dto.CreatedUserDTO;
+import br.com.listit.listit.web.dto.UserAllFieldsDTO;
 import br.com.listit.listit.web.dto.TokenJwtDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import br.com.listit.listit.web.security.token.TokenUtil;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @AllArgsConstructor
-@Log4j2
 public class AcessoServiceImpl implements AcessoService {
 	@Lazy
 	private ListItUserDetailsService userDetailsServiceImpl;
@@ -59,7 +57,7 @@ public class AcessoServiceImpl implements AcessoService {
 	private TokenUtil tokenUtil;
 	
 	private static String idClientGoogle;
-
+	
 	@Override
 	public TokenJwtDTO authenticateAndGenerateToken(String username, String password) {
 		authenticate(username, password);
@@ -90,7 +88,7 @@ public class AcessoServiceImpl implements AcessoService {
 	}
 	
 	private UserDTO convertUserEntityToUSerDto(User user) {
-		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).description(user.getDescription()).build();
+		return UserDTO.builder().email(user.getEmail()).name(user.getName()).username(user.getUsername()).viewProfile(user.isViewProfile()).urlImage(user.getUrlImage()).description(user.getDescription()).build();
 	}
 
 	@Override
@@ -127,7 +125,7 @@ public class AcessoServiceImpl implements AcessoService {
 		try {
 			userDetails = userDetailsServiceImpl.loadUserByEmail(email);
 		}catch (UsernameNotFoundException e) {
-			CreatedUserDTO extratUserFromIdToken = extratUserFromIdToken(idToken);
+			UserAllFieldsDTO extratUserFromIdToken = extratUserFromIdToken(idToken);
 			userService.createUser(extratUserFromIdToken);
 			listAnimeEntityService.createAllListFoundUserByUsername(extratUserFromIdToken.getUsername());
 			userDetails = userDetailsServiceImpl.loadUserByEmail(extratUserFromIdToken.getEmail());
@@ -136,12 +134,13 @@ public class AcessoServiceImpl implements AcessoService {
 		return generateTokenFromUserDetails(userDetails);
 	}
 	
-	private CreatedUserDTO extratUserFromIdToken(GoogleIdToken idToken) {
+	private UserAllFieldsDTO extratUserFromIdToken(GoogleIdToken idToken) {
 		Payload payload = idToken.getPayload();
 		
-		 return  CreatedUserDTO.builder()
+		 return  UserAllFieldsDTO.builder()
 				.email(payload.getEmail())
 				.name(payload.get("name").toString())
+				.urlImage(payload.get("picture").toString())
 				.viewProfile(true)
 				.username(payload.getEmail())
 				.build();
@@ -160,14 +159,9 @@ public class AcessoServiceImpl implements AcessoService {
 		return token;
 	}
 
-	public static String getIdClientGoogle() {
-		return idClientGoogle;
-	}
-
 	@Value("${google.id-cliente}")
 	private void setIdClientGoogle(String idClientGoogle) {
 		AcessoServiceImpl.idClientGoogle = idClientGoogle;
 	}
-	
 	
 }

@@ -21,7 +21,6 @@ import br.com.listit.listit.services.user.UserService;
 import br.com.listit.listit.web.dto.AnimeRecord;
 import br.com.listit.listit.web.dto.ListAnimeDTO;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 
 @Service
 @AllArgsConstructor

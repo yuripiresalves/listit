@@ -17,7 +17,10 @@ configurations {
 }
 
 repositories {
-	mavenCentral()
+	 mavenCentral()
+	 maven {
+	  url "https://plugins.gradle.org/m2/"
+	}
 	google()
 }
 
@@ -51,16 +54,10 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+bootJar {
+    mainClass = 'br.com.listit.listit.ListitApplication'
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-/*jib {
-    from {
-        image = 'https://dso.docker.com/images/openjdk/digests/sha256:028015df0ef996dc922c625f456039b37319c5cf10a2aa40d8670727a70f5e02'
-    }
-
-    to {
-        image = "johnwillv/${project.name}:${project.version}"
-    }
-}*/
