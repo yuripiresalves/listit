@@ -1,3 +1,4 @@
+import { api } from '@/services/api';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
@@ -8,7 +9,25 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  // session: {
-  //   strategy: 'jwt',
-  //  },
+  callbacks: {
+    async signIn({ account }) {
+      console.log('oi');
+
+      // const { setUser } = useContext(AuthContext);
+      console.log('oi2');
+
+      try {
+        const { data } = await api.post('/authenticate/login/google', {
+          token: account?.id_token,
+        });
+        console.log(data);
+
+        // setUser(data.userDTO);
+      } catch (error) {
+        console.log(error);
+      }
+
+      return true;
+    },
+  },
 });

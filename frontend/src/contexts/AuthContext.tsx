@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 import { api } from '@/services/api';
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
-import { getSession, signIn } from 'next-auth/react';
+import { getSession, signIn, useSession } from 'next-auth/react';
 
 type User = {
   name: string;
@@ -21,6 +21,7 @@ type SignInCredentials = {
 type AuthContextType = {
   isAuthenticaded: boolean;
   user: User | null;
+  setUser: (user: User) => void;
   signInWithCredentials: (credentials: SignInCredentials) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => void;
@@ -30,6 +31,8 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export function AuthProvider({ children }: any) {
   const [user, setUser] = useState<User | null>(null);
+  // const { data: session } = useSession();
+
   const router = useRouter();
 
   const isAuthenticaded = !!user;
@@ -73,11 +76,10 @@ export function AuthProvider({ children }: any) {
   }
 
   async function signInWithGoogle() {
-    console.log('oi');
-
     try {
-      const response = await signIn('google');
-      console.log('to aqui na response', response);
+      await signIn('google');
+      console.log(user);
+      // router.push('/');
     } catch (error) {
       console.log(error);
     }
@@ -95,6 +97,7 @@ export function AuthProvider({ children }: any) {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         isAuthenticaded,
         signInWithCredentials,
         signInWithGoogle,

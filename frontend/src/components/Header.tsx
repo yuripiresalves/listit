@@ -13,7 +13,9 @@ import { useSession } from 'next-auth/react';
 
 export function Header() {
   const { user, signOut } = useContext(AuthContext);
-  // const { data: session } = useSession();
+  // const oi = useSession();
+  const { data: session } = useSession();
+  // console.log(`aaaa`, oi);
 
   return (
     <header className="py-4 bg-emerald-800 w-full">
@@ -27,7 +29,7 @@ export function Header() {
             <NavigationMenu.List>
               <NavigationMenu.Item>
                 <NavigationMenu.Trigger className="group flex items-center gap-4 cursor-pointer">
-                  <strong>{user.name}</strong>
+                  <strong>{user?.name}</strong>
                   <Image
                     src="https://i.pravatar.cc/50"
                     alt=""
