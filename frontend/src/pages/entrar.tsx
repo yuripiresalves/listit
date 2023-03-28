@@ -76,30 +76,45 @@ export default function Login() {
                 Entrar
               </button>
             </form>
-            <Link
+            {/* <Link
               href="esqueci-senha"
               className="self-end my-2 text-sm hover:underline"
             >
               Esqueci minha senha
-            </Link>
-            <span className="text-center mb-4 text-zinc-600 border-t border-zinc-300"></span>
-            <button
+            </Link> */}
+            {/* <span className="text-center my-4 text-zinc-600 border-b border-zinc-300"></span> */}
+            <div className="relative my-4 mx-12">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
+                <div className="w-full border-t border-zinc-400"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="px-4 bg-zinc-200 text-sm text-zinc-600">
+                  ou
+                </span>
+              </div>
+            </div>
+            {/* <button
               onClick={signInWithGoogle}
               className="bg-rose-800 p-4 rounded-md flex justify-center items-center gap-4 text-zinc-200 font-bold text-xl hover:bg-rose-900 transition-colors"
             >
               <GoogleLogo size={28} weight="bold" />
               Entrar com Google
-            </button>
-            <GoogleLogin
-              onSuccess={(credentialResponse) => {
-                signInWithGoogle(credentialResponse);
-              }}
-              onError={() => {
-                console.log('Login Failed');
-              }}
-            />
+            </button> */}
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={(credentialResponse) => {
+                  signInWithGoogle(credentialResponse);
+                }}
+                onError={() => {
+                  console.log('Login Failed');
+                }}
+              />
+            </div>
 
-            <span className="self-end mt-2 text-sm">
+            <span className="self-center mt-2 text-sm">
               Ainda não possui uma conta?{' '}
               <Link
                 href="/criar-conta"

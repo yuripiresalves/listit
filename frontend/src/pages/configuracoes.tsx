@@ -11,30 +11,41 @@ import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/router';
 
 export default function Settings() {
   const { user } = useContext(AuthContext);
+  // const router = useRouter();
 
   const isPublicProfile = user?.viewProfile;
 
-  const [viewProfile, setViewProfile] = useState(isPublicProfile);
+  // const [viewProfile, setViewProfile] = useState(isPublicProfile);
   const [bio, setBio] = useState(user?.description);
+  const [name, setName] = useState(user?.name);
+  const [email, setEmail] = useState(user?.email);
+  const [username, setUsername] = useState(user?.username);
+  const [urlImage, setUrlImage] = useState(user?.urlImage);
+  // const [bio, setBio] = useState(user?.description);
 
-  async function handleViewProfile() {
-    if (viewProfile) {
-      await api.put('/users/profile/view/desability');
-      setViewProfile(false);
-    } else {
-      await api.put('/users/profile/view/active');
-      setViewProfile(true);
-    }
-  }
+  // async function handleViewProfile() {
+  //   if (viewProfile) {
+  //     await api.put('/users/profile/view/desability');
+  //     setViewProfile(false);
+  //   } else {
+  //     await api.put('/users/profile/view/active');
+  //     setViewProfile(true);
+  //   }
+  // }
 
   async function handleUpdateProfile(e: FormEvent) {
     try {
       e.preventDefault();
-      await api.put('/users/description', {
+      await api.put(`/users/all/${user?.username}`, {
+        name,
+        email,
+        username,
         description: bio,
+        urlImage,
       });
       toast('Perfil atualizado com sucesso', {
         type: 'success',
@@ -47,6 +58,7 @@ export default function Settings() {
         progress: undefined,
         theme: 'colored',
       });
+      // router.push('/perfil');
     } catch (error) {
       console.log(error);
 
@@ -92,14 +104,14 @@ export default function Settings() {
                 </span>
               </Tabs.Trigger>
 
-              <Tabs.Trigger
+              {/* <Tabs.Trigger
                 value="privacy"
                 className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500  rounded-md hover:text-emerald-900 hover:border-emerald-500"
               >
                 <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
                   Privacidade
                 </span>
-              </Tabs.Trigger>
+              </Tabs.Trigger> */}
 
               <Tabs.Trigger
                 value="account"
@@ -121,9 +133,54 @@ export default function Settings() {
                   onSubmit={handleUpdateProfile}
                 >
                   <div className="flex flex-col gap-2">
-                    <label htmlFor="bio">Biografia</label>
+                    <label htmlFor="urlImage">URL da imagem:</label>
+                    <input
+                      id="urlImage"
+                      value={urlImage}
+                      onChange={(e) => setUrlImage(e.target.value)}
+                      placeholder="https://exemplo.com/imagem.png"
+                      className="rounded-md p-4 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="name">Nome:</label>
+                    <input
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Digite seu nome"
+                      className="rounded-md p-4 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="username">Nome de usuário:</label>
+                    <input
+                      id="username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      placeholder="Digite seu nome de usuário"
+                      className="rounded-md p-4 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="email">E-mail:</label>
+                    <input
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Digite seu e-mail"
+                      className="rounded-md p-4 resize-none"
+                    />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="bio">Biografia:</label>
                     <textarea
                       value={bio}
+                      id="bio"
                       onChange={(e) => setBio(e.target.value)}
                       placeholder="Escreva uma breve biografia sobre você"
                       cols={30}
@@ -139,7 +196,7 @@ export default function Settings() {
               </div>
             </Tabs.Content>
 
-            <Tabs.Content value="privacy" className="flex-1">
+            {/* <Tabs.Content value="privacy" className="flex-1">
               <div className="px-8 py-2">
                 <h2 className="text-2xl font-bold text-zinc-900 mb-4">
                   Privacidade
@@ -162,7 +219,7 @@ export default function Settings() {
                   </Switch.Root>
                 </div>
               </div>
-            </Tabs.Content>
+            </Tabs.Content> */}
 
             <Tabs.Content value="account" className="flex-1">
               <div className="px-8 py-2">
