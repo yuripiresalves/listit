@@ -10,17 +10,21 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ account }) {
+    async signIn({ account, user }) {
       console.log('oi');
 
       // const { setUser } = useContext(AuthContext);
-      console.log('oi2');
 
       try {
+        console.log('oi2');
         const { data } = await api.post('/authenticate/login/google', {
           token: account?.id_token,
         });
         console.log(data);
+
+        user.yuri = data.userDTO;
+
+        console.log('user', user);
 
         // setUser(data.userDTO);
       } catch (error) {

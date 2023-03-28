@@ -1,5 +1,6 @@
 import '@/styles/main.css';
 import 'react-toastify/dist/ReactToastify.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import type { AppProps } from 'next/app';
 import { AuthProvider } from '@/contexts/AuthContext';
@@ -9,11 +10,11 @@ import { SessionProvider } from 'next-auth/react';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <AuthProvider>
-      <SessionProvider session={pageProps.session}>
+    <GoogleOAuthProvider clientId="210340187221-oj81f7cet5ncc21mk6c70uoddqs6l76a.apps.googleusercontent.com">
+      <AuthProvider>
         <Component {...pageProps} />
         <ToastContainer />
-      </SessionProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }

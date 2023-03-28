@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { AsideBanner } from '../components/AsideBanner';
 import { toast } from 'react-toastify';
 import { getSession, signIn } from 'next-auth/react';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Login() {
   const { register, handleSubmit } = useForm();
@@ -90,6 +91,15 @@ export default function Login() {
               <GoogleLogo size={28} weight="bold" />
               Entrar com Google
             </button>
+            <GoogleLogin
+              onSuccess={(credentialResponse) => {
+                signInWithGoogle(credentialResponse);
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
+
             <span className="self-end mt-2 text-sm">
               Ainda não possui uma conta?{' '}
               <Link

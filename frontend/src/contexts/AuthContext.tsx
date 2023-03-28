@@ -3,6 +3,7 @@ import { api } from '@/services/api';
 import { parseCookies, setCookie } from 'nookies';
 import { useRouter } from 'next/router';
 import { getSession, signIn, useSession } from 'next-auth/react';
+import { GoogleLogin } from '@react-oauth/google';
 
 type User = {
   name: string;
@@ -23,7 +24,7 @@ type AuthContextType = {
   user: User | null;
   setUser: (user: User) => void;
   signInWithCredentials: (credentials: SignInCredentials) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (credentialResponse: any) => Promise<void>;
   signOut: () => void;
 };
 
@@ -75,11 +76,32 @@ export function AuthProvider({ children }: any) {
     router.push('/');
   }
 
-  async function signInWithGoogle() {
+  async function signInWithGoogle(credentialResponse: any) {
     try {
-      await signIn('google');
-      console.log(user);
-      // router.push('/');
+      // await signIn('google');
+      const { data } = await api.post('/authenticate/login/google', {
+        token: credentialResponse.credential,
+      });
+
+      setCookie(undefined, 'listit.token', data.token, {
+        maxAge: 60 * 60 * 1, // 1 hour
+      });
+
+      api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
+
+      setUser(data.userDTO);
+      router.push('/');
+      // <GoogleLogin
+      //   onSuccess={async (credentialResponse) => {
+      //     console.log(credentialResponse);
+
+      //   }}
+      //   onError={() => {
+      //     console.log('Login Failed');
+      //   }}
+      // />;
+      // console.log(user);
+      // // router.push('/');
     } catch (error) {
       console.log(error);
     }
