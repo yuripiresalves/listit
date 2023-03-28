@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
-import br.com.listit.listit.web.dto.CreatedUserDTO;
+import br.com.listit.listit.web.dto.UserAllFieldsDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
 
@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
-	public UserDTO createUser(CreatedUserDTO userDTO) {
+	public UserDTO createUser(UserAllFieldsDTO userDTO) {
 		User convertUSerDtoToUserEntity = convertUserDtoToUserEntity(userDTO);
 		String password = convertUSerDtoToUserEntity.getPassword();
 		
 		if(password != null) {
-			convertUSerDtoToUserEntity.setPassword(password);
+			convertUSerDtoToUserEntity.setPassword(passwordEncoder.encode(password));
 		}
 
 		User user = userRepository.save(convertUSerDtoToUserEntity);
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void desabilityViewProfile() {
 		Optional<User> userCurrent = getUserCurrent();
-		User user = extratUserLoggedOrThrowException(userCurrent);
+		User user = extratUserOrThrowException(userCurrent);
 		
 		user.setViewProfile(false);
 		
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void activeViewProfile() {
 		Optional<User> userCurrent = getUserCurrent();
-		User user = extratUserLoggedOrThrowException(userCurrent);
+		User user = extratUserOrThrowException(userCurrent);
 		
 		user.setViewProfile(true);
 		
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updatePasswordUserCurrent(String password) {
 		Optional<User> userCurrent = getUserCurrent();
-		User user = extratUserLoggedOrThrowException(userCurrent);
+		User user = extratUserOrThrowException(userCurrent);
 		
 		user.setPassword(passwordEncoder.encode(password));
 		
@@ -79,14 +79,26 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateDesciption(String description) {
 		Optional<User> userCurrent = getUserCurrent();
-		User user = extratUserLoggedOrThrowException(userCurrent);
+		User user = extratUserOrThrowException(userCurrent);
 		
 		user.setDescription(description);
 		
 		userRepository.save(user);
 	}
 	
-	private User extratUserLoggedOrThrowException(Optional<User> userCurrent) {
+	@Override
+	public void updateUser(String username, UserAllFieldsDTO userDTO) {
+		Optional<User> userFounded = userRepository.findByUsername(username);
+		User user = extratUserOrThrowException(userFounded);
+		
+		User userToUpdated = convertUserDtoToUserEntity(userDTO);
+		
+		userToUpdated.setId(user.getId());
+		
+		userRepository.save(userToUpdated);
+	}
+	
+	private User extratUserOrThrowException(Optional<User> userCurrent) {
 		return userCurrent.orElseThrow(()->{
 			throw new UserNotFoundException("User not found");
 		});
@@ -106,7 +118,7 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByUsername(userDetails.getUsername());
 	}
 
-	private User convertUserDtoToUserEntity(CreatedUserDTO dto) {
+	private User convertUserDtoToUserEntity(UserAllFieldsDTO dto) {
 		return User.builder().email(dto.getEmail()).name(dto.getName()).viewProfile(dto.isViewProfile()).password(dto.getPassword())
 				.username(dto.getUsername()).description(dto.getDescription()).urlImage(dto.getUrlImage()).build();
 	}
@@ -120,5 +132,7 @@ public class UserServiceImpl implements UserService {
 		User user = getUserCurrent().orElseThrow(() -> new UserNotFoundException("User not found"));
 		return convertUserEntityToUSerDto(user);
 	}
+
+
 
 }

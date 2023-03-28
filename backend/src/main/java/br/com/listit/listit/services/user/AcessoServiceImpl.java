@@ -29,7 +29,7 @@ import br.com.listit.listit.exception.BadCredentialsCustomException;
 import br.com.listit.listit.exception.UserDisabledException;
 import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.services.user.security.ListItUserDetailsService;
-import br.com.listit.listit.web.dto.CreatedUserDTO;
+import br.com.listit.listit.web.dto.UserAllFieldsDTO;
 import br.com.listit.listit.web.dto.TokenJwtDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import br.com.listit.listit.web.security.token.TokenUtil;
@@ -125,7 +125,7 @@ public class AcessoServiceImpl implements AcessoService {
 		try {
 			userDetails = userDetailsServiceImpl.loadUserByEmail(email);
 		}catch (UsernameNotFoundException e) {
-			CreatedUserDTO extratUserFromIdToken = extratUserFromIdToken(idToken);
+			UserAllFieldsDTO extratUserFromIdToken = extratUserFromIdToken(idToken);
 			userService.createUser(extratUserFromIdToken);
 			listAnimeEntityService.createAllListFoundUserByUsername(extratUserFromIdToken.getUsername());
 			userDetails = userDetailsServiceImpl.loadUserByEmail(extratUserFromIdToken.getEmail());
@@ -134,10 +134,10 @@ public class AcessoServiceImpl implements AcessoService {
 		return generateTokenFromUserDetails(userDetails);
 	}
 	
-	private CreatedUserDTO extratUserFromIdToken(GoogleIdToken idToken) {
+	private UserAllFieldsDTO extratUserFromIdToken(GoogleIdToken idToken) {
 		Payload payload = idToken.getPayload();
 		
-		 return  CreatedUserDTO.builder()
+		 return  UserAllFieldsDTO.builder()
 				.email(payload.getEmail())
 				.name(payload.get("name").toString())
 				.urlImage(payload.get("picture").toString())
