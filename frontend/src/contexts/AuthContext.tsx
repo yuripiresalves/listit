@@ -7,9 +7,9 @@ type User = {
   name: string;
   email: string;
   username: string;
-  avatar_url: string;
   viewProfile: boolean;
   description: string;
+  urlImage: string;
 };
 
 type SignInCredentials = {
@@ -84,7 +84,7 @@ export function AuthProvider({ children }: any) {
       });
 
       api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
-
+      console.log(data);
       setUser(data.userDTO);
 
       router.push('/');

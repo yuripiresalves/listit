@@ -122,15 +122,13 @@ export function Table({ listType }: TableProps) {
                 <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100">
                   Episódios
                 </th>
-                <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100">
-                  Nota
-                </th>
+
                 <th
                   className={`p-4 sticky top-0 bg-emerald-800 text-zinc-100 ${
                     listType === '' && 'rounded-tr-md rounded-br-md'
                   }`}
                 >
-                  Adicionado em
+                  Nota
                 </th>
                 {listType !== '' && (
                   <th className="p-4 sticky top-0 bg-emerald-800 text-zinc-100 rounded-tr-md rounded-br-md">
@@ -153,15 +151,13 @@ export function Table({ listType }: TableProps) {
                   <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
                     {anime.episodes}
                   </td>
-                  <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200">
-                    {anime.score}
-                  </td>
+
                   <td
                     className={`p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 ${
                       listType === '' && 'rounded-tr-md rounded-br-md'
                     }`}
                   >
-                    10/10/2021
+                    {anime.score}
                   </td>
                   {listType !== '' && (
                     <td className="p-4 bg-zinc-100 border-t-4 bordet-t-zinc-200 rounded-tr-md rounded-br-md">

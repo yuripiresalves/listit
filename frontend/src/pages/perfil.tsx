@@ -46,7 +46,13 @@ export default function MyProfile() {
       <GridContainer>
         <main className="mt-20 md:mt-24 mb-10 px-4 bg-zinc-100 rounded-md flex flex-col items-center">
           <div className="rounded-full w-24 h-24 md:w-32 md:h-32 absolute -mt-12 md:-mt-16 overflow-hidden border-4 outline outline-3 outline-emerald-600 border-zinc-200">
-            <img src="https://github.com/yuripiresalves.png" />
+            <img
+              src={
+                user?.urlImage ||
+                `https://eu.ui-avatars.com/api/?name=${user?.name}&size=250`
+              }
+              className="w-full h-full"
+            />
           </div>
           <div className="pt-16 md:pt-20 text-center w-full border-b border-zinc-200 p-4">
             <h1 className="text-2xl font-bold">{user?.name}</h1>
