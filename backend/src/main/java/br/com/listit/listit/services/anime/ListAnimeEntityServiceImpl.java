@@ -21,9 +21,13 @@ import br.com.listit.listit.services.user.UserService;
 import br.com.listit.listit.web.dto.AnimeRecord;
 import br.com.listit.listit.web.dto.ListAnimeDTO;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 
 	private ListAnimeEntityRepository listAnimeEntityRepository;
@@ -153,7 +157,7 @@ public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 		User userCurrent = getUserCurrent();
 		
 		if (userCurrent.getListAnime().isEmpty()) {
-			throw new OperationException("user already have lists created");
+			throw new OperationException("the user has no lists created");
 		}
 		
 		ListAnimeEntity findListByID = userCurrent.getListAnime().stream()
