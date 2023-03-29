@@ -42,7 +42,7 @@ export function SelectList({
       >
         <Select.Value>
           {selectedValue
-            ? listTypes[selectedValue]
+            ? listTypes.find((type) => type === selectedValue)
             : listType
             ? listTypes.find((type) => type === listType)
             : 'Selecione a lista'}
