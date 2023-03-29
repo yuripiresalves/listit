@@ -11,13 +11,11 @@ import { FormEvent, useContext, useState } from 'react';
 import { AuthContext } from '@/contexts/AuthContext';
 import { api } from '@/services/api';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 export default function Settings() {
-  const { user } = useContext(AuthContext);
-  // const router = useRouter();
+  const { user, signOut } = useContext(AuthContext);
 
-  const isPublicProfile = user?.viewProfile;
+  // const isPublicProfile = user?.viewProfile;
 
   // const [viewProfile, setViewProfile] = useState(isPublicProfile);
   const [bio, setBio] = useState(user?.description);
@@ -63,6 +61,38 @@ export default function Settings() {
       console.log(error);
 
       toast('Erro ao atualizar perfil', {
+        type: 'error',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+    }
+  }
+
+  async function handleDeleteAccount() {
+    try {
+      await api.delete('/users');
+      toast('Conta excluída com sucesso', {
+        type: 'success',
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'colored',
+      });
+      signOut();
+    } catch (error) {
+      console.log(error);
+
+      toast('Erro ao excluir conta', {
         type: 'error',
         position: 'top-right',
         autoClose: 5000,
@@ -247,7 +277,10 @@ export default function Settings() {
                             Cancelar
                           </button>
                         </AlertDialog.Cancel>
-                        <AlertDialog.Action asChild>
+                        <AlertDialog.Action
+                          asChild
+                          onClick={handleDeleteAccount}
+                        >
                           <button className="flex justify-center items-center px-4 py-2 font-bold bg-rose-200 text-rose-700 rounded-md">
                             Sim, deletar minha conta
                           </button>
