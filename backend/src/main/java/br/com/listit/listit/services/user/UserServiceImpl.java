@@ -14,9 +14,13 @@ import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserAllFieldsDTO;
 import br.com.listit.listit.web.dto.UserDTO;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class UserServiceImpl implements UserService {
 
 	private UserRepository userRepository;
@@ -139,7 +143,4 @@ public class UserServiceImpl implements UserService {
 		
 		userRepository.deleteById(user.getId());
 	}
-
-
-
 }
