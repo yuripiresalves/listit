@@ -35,7 +35,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
-
 	@ExceptionHandler(ListAnimeNotFoundException.class)
     public ResponseEntity<BadRequestExceptionDetails> listAnimeNotException(ListAnimeNotFoundException badRequestException){
     

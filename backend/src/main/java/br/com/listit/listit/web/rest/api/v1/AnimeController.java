@@ -23,6 +23,15 @@ import lombok.AllArgsConstructor;
 public class AnimeController {
 	private AnimeService animeService;
 
+	@Operation(description = "search a Anime by id")
+	@ApiResponse(responseCode = "200", description = "Found the Anime", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = AnimeRecord.class)) })
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<?> findById(@PathVariable("id") int id) {
+
+		return ResponseEntity.ok(animeService.findAnimeByID(id));
+  }
+  
 	@Operation(description = "search a Anime by name")
 	@ApiResponse(responseCode = "200", description = "Found the Anime", content = {
 			@Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = AnimeRecord.class))) })

@@ -1,53 +1,54 @@
-
-import { AnimeCard } from '@/components/AnimeCard';
-import { GridContainer } from '@/components/GridContainer';
 import Head from 'next/head';
-import Image from 'next/image';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
+
 import { GridContainer } from '@/components/GridContainer';
+import { AnimeCard } from '@/components/AnimeCard';
 import { Table } from '@/components/Table';
 import * as Tabs from '@radix-ui/react-tabs';
-import Head from 'next/head';
+import { api } from '@/services/api';
+import { MagnifyingGlass, X } from 'phosphor-react';
+import { Loading } from '@/components/Loading';
+import { AnimeNotFound } from '@/components/AnimeNotFound';
+
+export type Anime = {
+  id: number;
+  title: string;
+  episodes: number;
+  score: number;
+  imageJPG: {
+    imageURL: string;
+  };
+  synopsis: string;
+};
+
 export default function Home() {
   const [animeName, setAnimeName] = useState('');
-  const [animes, setAnimes] = useState([
-    {
-      id: 1,
-      title: 'Shingeki no Kyojin',
-      image: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-      status: 'watching',
-      sinopse:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime! Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum',
-    },
-    {
-      id: 2,
-      title: 'Death Note',
-      image: 'https://cdn.myanimelist.net/images/anime/9/9453.jpg',
-      status: 'finished',
-      sinopse:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus mulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime!',
-    },
-    {
-      id: 3,
-      title: 'Naruto',
-      image: 'https://cdn.myanimelist.net/images/anime/5/17407.jpg',
-      status: 'toWatch',
-      sinopse:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime!',
-    },
-    {
-      id: 4,
-      title: 'Steins;Gate',
-      image: 'https://cdn.myanimelist.net/images/anime/5/73199.jpg',
-      status: 'toWatch',
-      sinopse:
-        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic architecto consequuntur illo error laudantium sit animi dolorum, quis minus nulla est accusamus laborum minima quo adipisci, labore nisi, laboriosam maxime!',
-    },
-  ]);
-  async function handleSearchAnime(event: any) {
-    setAnimeName(event.target.value);
+  const [animes, setAnimes] = useState<Anime[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  async function handleSearchAnime(event: FormEvent) {
+    event.preventDefault();
+
+    if (!animeName) {
+      return;
+    }
+
+    try {
+      setHasError(false);
+      setIsLoading(true);
+      const response = await api.get(`/findByName/${animeName}`);
+      const data = await response.data;
+      setAnimes(data);
+    } catch (error) {
+      setHasError(true);
+      console.log('error', error);
+    } finally {
+      setIsLoading(false);
+    }
   }
-return (
+
+  return (
     <>
       <Head>
         <title>Início | listit</title>
@@ -63,20 +64,43 @@ return (
           <p className="text-zinc-300 mb-6 w-full text-center font-bold ">
             Pesquise entre milhares de animes disponíveis em nosso catálogo
           </p>
-          <input
-            type="text"
-            placeholder="Pesquisar anime"
-            className="p-4 rounded-md bg-zinc-200 w-full"
-             value={animeName}
-             onChange={handleSearchAnime}
-          />
+          <form onSubmit={handleSearchAnime} className="w-full flex gap-3">
+            <input
+              type="text"
+              placeholder="Pesquisar anime"
+              className="p-4 rounded-md bg-zinc-200 w-full"
+              value={animeName}
+              onChange={(e) => setAnimeName(e.target.value)}
+            />
+            <button className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all">
+              <MagnifyingGlass size={24} className="text-emerald-800" />
+            </button>
+            {animes.length > 0 && (
+              <button
+                className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all"
+                onClick={() => {
+                  setAnimeName('');
+                  setAnimes([]);
+                }}
+              >
+                <X size={24} className="text-red-600" />
+              </button>
+            )}
+          </form>
           <span className="text-zinc-300 mt-2 text-left self-start text-sm">
             Sugestões: Shingeki no Kyojin, Death Note, Naruto
           </span>
         </div>
       </section>
       <section className="py-10">
-       
+        {/* {hasError && <AnimeNotFound />} */}
+        {isLoading ? (
+          <GridContainer>
+            <Loading />
+          </GridContainer>
+        ) : hasError ? (
+          <AnimeNotFound />
+        ) : animes.length > 0 ? (
           <GridContainer>
             <h2 className="text-2xl font-bold text-zinc-700 mb-8">
               Buscando por:{' '}
@@ -85,87 +109,86 @@ return (
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {animes.map((anime) => (
-                <AnimeCard anime={anime} />
+                <AnimeCard key={anime.id} anime={anime} />
               ))}
             </div>
           </GridContainer>
-</section>
-      <section className="py-10">
-        <GridContainer>
-          <h2 className="text-2xl font-bold text-emerald-700 mb-8">
-            Minhas listas
-          </h2>
-          <Tabs.Root defaultValue="all">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 my-8">
-              <Tabs.List>
-                <Tabs.Trigger
-                  value="all"
-                  className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
-                >
-                  <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
-                    Todos
-                  </span>
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.List>
-                <Tabs.Trigger
-                  value="watching"
-                  className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
-                >
-                  <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
-                    Assistindo
-                  </span>
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.List>
-                <Tabs.Trigger
-                  value="finished"
-                  className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
-                >
-                  <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
-                    Finalizados
-                  </span>
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.List>
-                <Tabs.Trigger
-                  value="toWatch"
-                  className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
-                >
-                  <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
-                    Para assistir
-                  </span>
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.List>
-                <Tabs.Trigger
-                  value="favorites"
-                  className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
-                >
-                  <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
-                    Favoritos
-                  </span>
-                </Tabs.Trigger>
-              </Tabs.List>
-            </div>
-            <Tabs.Content value="all">
-              <Table />
-            </Tabs.Content>
-            <Tabs.Content value="watching">
-              <Table />
-            </Tabs.Content>
-            <Tabs.Content value="finished">
-              <Table />
-            </Tabs.Content>
-            <Tabs.Content value="toWatch">
-              <Table />
-            </Tabs.Content>
-            <Tabs.Content value="favorites">
-              <Table />
-            </Tabs.Content>
-          </Tabs.Root>
-        </GridContainer>
-
+        ) : (
+          <GridContainer>
+            <h2 className="text-2xl font-bold text-emerald-700 mb-8">
+              Minhas listas
+            </h2>
+            <Tabs.Root defaultValue="all">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 my-8">
+                <Tabs.List>
+                  <Tabs.Trigger
+                    value="all"
+                    className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
+                  >
+                    <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
+                      Todos
+                    </span>
+                  </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.List>
+                  <Tabs.Trigger
+                    value="watching"
+                    className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
+                  >
+                    <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
+                      Assistindo
+                    </span>
+                  </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.List>
+                  <Tabs.Trigger
+                    value="finished"
+                    className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
+                  >
+                    <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
+                      Finalizados
+                    </span>
+                  </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.List>
+                  <Tabs.Trigger
+                    value="toWatch"
+                    className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
+                  >
+                    <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
+                      Para assistir
+                    </span>
+                  </Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.List>
+                  <Tabs.Trigger
+                    value="favorites"
+                    className="w-full text-zinc-500 data-[state='active']:text-emerald-900 data-[state='active']:bg-emerald-100 data-[state='active']:hover:text-emerald-900 data-[state='active']:border-emerald-500 border border-zinc-400 rounded-md hover:text-emerald-900 hover:border-emerald-500"
+                  >
+                    <span className="font-bold text-sm md:text-md rounded-md p-4 flex flex-col gap-4">
+                      Favoritos
+                    </span>
+                  </Tabs.Trigger>
+                </Tabs.List>
+              </div>
+              <Tabs.Content value="all">
+                <Table />
+              </Tabs.Content>
+              <Tabs.Content value="watching">
+                <Table />
+              </Tabs.Content>
+              <Tabs.Content value="finished">
+                <Table />
+              </Tabs.Content>
+              <Tabs.Content value="toWatch">
+                <Table />
+              </Tabs.Content>
+              <Tabs.Content value="favorites">
+                <Table />
+              </Tabs.Content>
+            </Tabs.Root>
+          </GridContainer>
+        )}
       </section>
     </>
   );

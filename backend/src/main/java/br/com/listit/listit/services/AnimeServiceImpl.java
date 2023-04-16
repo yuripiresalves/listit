@@ -12,6 +12,8 @@ import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceEx
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+
 import net.sandrohc.jikan.model.anime.Anime;
 
 @Service
@@ -58,7 +60,6 @@ public class AnimeServiceImpl implements AnimeService {
 				.imageJPG(imageJpgConverted)
 				.synopsis(anime.getSynopsis())
 				.build();
-				
 	}
 	
 	private ImageJPG convertImageJPGToImageEntity(net.sandrohc.jikan.model.common.Image jpg) {
@@ -67,9 +68,7 @@ public class AnimeServiceImpl implements AnimeService {
 			.smallImageURL(jpg.smallImageUrl)
 			.largeImageURL(jpg.largeImageUrl)
 			.build();
-		
 		return image;
-				
 	}
 
 }
