@@ -109,9 +109,10 @@ public class UserServiceImpl implements UserService {
 		userToUpdated.setId(user.getId());
 		
 		if(userDTO.getPassword()==null || userDTO.getPassword().equals("")) {
-			String encodePassword = passwordEncoder.encode(user.getPassword());
-			userToUpdated.setPassword(encodePassword);
+			userToUpdated.setPassword(user.getPassword());
 		}
+		
+		userToUpdated.setPassword(passwordEncoder.encode(userToUpdated.getPassword()));
 		
 		userRepository.save(userToUpdated);
 	}
