@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.listit.listit.domain.entity.ItemAnimeEntity;
@@ -30,11 +31,18 @@ import lombok.NoArgsConstructor;
 @Data
 public class ListAnimeEntityServiceImpl implements ListAnimeEntityService {
 
+	@Autowired
 	private ListAnimeEntityRepository listAnimeEntityRepository;
+	
+	@Autowired
 	private AnimeService animeService;
+	
+	@Autowired
 	private UserService userService;
+	
+	@Autowired
 	private UserRepository userRepository;
-
+	
 	public List<ListAnimeDTO> createAllListFoundUserByUsername(String username) {
 		User userCurrent = userRepository.findByUsername(username).get();
 
