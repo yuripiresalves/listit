@@ -22,47 +22,45 @@ import br.com.listit.listit.web.dto.UserDTO;
 @DisplayName("test createUser")
 @ExtendWith(SpringExtension.class)
 class CreateUserApplicationTests {
-	
+
 	@Mock
 	private UserRepository userRepository;
-	
+
 	@Mock
 	private PasswordEncoder passwordEncoder;
-	
+
 	@Test
 	void when_passwordIsNotNullSuccessfull() {
 		UserAllFieldsDTO userAllFieldsDTO = UserAllFieldsDTOMock.getUserAllFieldsDTO();
 		userAllFieldsDTO.setPassword("passsword");
-		
+
 		User user = UserAllFieldsDTOMock.getUser();
-		
+
 		when(userRepository.save(user)).thenReturn(user);
-		
+
 		UserServiceImpl userService = new UserServiceImpl();
 		userService.setUserRepository(userRepository);
-		
-		Assertions.assertThat(userService.createUser(UserAllFieldsDTOMock.getUserAllFieldsDTO()))
-			.isEqualTo(UserAllFieldsDTOMock.getUserDTO());
-		
+
+		Assertions.assertThat(userService.createUser(userAllFieldsDTO))
+				.isEqualTo(UserAllFieldsDTOMock.getUserDTO());
+
 	}
-	
+
 	@Test
 	void when_passwordIsNullSuccessfull() {
 		UserAllFieldsDTO userAllFieldsDTO = UserAllFieldsDTOMock.getUserAllFieldsDTO();
 		userAllFieldsDTO.setPassword(null);
-		
+
 		User user = UserAllFieldsDTOMock.getUser();
-		
+
 		when(userRepository.save(user)).thenReturn(user);
-		
+
 		UserServiceImpl userService = new UserServiceImpl();
 		userService.setUserRepository(userRepository);
-		
-		
-		Assertions.assertThat(userService.createUser(UserAllFieldsDTOMock.getUserAllFieldsDTO()))
-			.isEqualTo(UserAllFieldsDTOMock.getUserDTO());
-		
+
+		Assertions.assertThat(userService.createUser(userAllFieldsDTO))
+				.isEqualTo(UserAllFieldsDTOMock.getUserDTO());
+
 	}
-	
 
 }
