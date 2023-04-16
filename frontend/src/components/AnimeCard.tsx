@@ -1,24 +1,46 @@
+import { Anime } from '@/pages';
+import { api } from '@/services/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star } from 'phosphor-react';
+import { useContext, useEffect, useState } from 'react';
+import { FavoriteStar } from './FavoriteStar';
+import { AuthContext } from '@/contexts/AuthContext';
 
 interface AnimeCardProps {
-  anime: {
-    title: string;
-    image: string;
-    sinopse: string;
-  };
+  anime: Anime;
 }
 
 export function AnimeCard({ anime }: AnimeCardProps) {
+  const [isFavorite, setIsFavorite] = useState(false);
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    async function getFavoriteAnimes() {
+      try {
+        const response = await api.get(`/lists/FAVORITO`);
+
+        const favoritesAnimes = response.data.items;
+
+        const isFavorite = favoritesAnimes.find((favoriteAnime: Anime) => {
+          return favoriteAnime.id === Number(anime.id);
+        });
+
+        setIsFavorite(isFavorite);
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+    getFavoriteAnimes();
+  }, [anime.id]);
+
   return (
     <div className="flex border flex-1 gap-8 justify-between bg-zinc-100 p-4 rounded-md">
       <Link
-        href="/anime/slug-do-anime"
+        href={`/anime/${anime.id}`}
         className="rounded-md w-1/4 overflow-hidden"
       >
         <Image
-          src={anime.image}
+          src={anime.imageJPG.imageURL}
           alt={anime.title}
           width={225}
           height={300}
@@ -32,19 +54,24 @@ export function AnimeCard({ anime }: AnimeCardProps) {
             {anime.title}
           </h3>
           <p className="text-zinc-500 h-40 overflow-y-scroll">
-            {anime.sinopse}
+            {anime.synopsis}
           </p>
         </div>
         <div className="flex justify-between items-center gap-4 mt-4">
           <Link
-            href="/anime/slug-do-anime"
+            href={`/anime/${anime.id}`}
             className="bg-emerald-700 text-zinc-100 py-2 px-4 rounded-md hover:bg-emerald-800 transition-colors"
           >
             Ver mais
           </Link>
-          <button className="bg-transparent text-zinc-800 flex items-center gap-2 p-2 rounded-md">
-            <Star size={28} weight="bold" className="text-yellow-500" />
-          </button>
+
+          {user && (
+            <FavoriteStar
+              id={anime.id}
+              isFavorite={isFavorite}
+              setIsFavorite={setIsFavorite}
+            />
+          )}
         </div>
       </div>
     </div>

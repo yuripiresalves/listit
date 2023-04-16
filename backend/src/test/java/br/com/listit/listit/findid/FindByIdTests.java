@@ -9,12 +9,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
 import br.com.listit.listit.findid.mock.AnimeMock;
-import br.com.listit.listit.services.AnimeService;
-import br.com.listit.listit.services.AnimeServiceImpl;
+import br.com.listit.listit.services.anime.AnimeService;
+import br.com.listit.listit.services.anime.AnimeServiceImpl;
 import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
+import br.com.listit.listit.web.dto.AnimeRecord;
 
 @DisplayName("test findAnimeByID")
 class FindByIdTests {
@@ -29,7 +29,7 @@ class FindByIdTests {
 		
 		AnimeRecord anime = animeService.findAnimeByID(1);
 		
-		Assertions.assertThat(anime).isEqualTo(AnimeMock.getAnimeRocord());
+		Assertions.assertThat(anime).isEqualTo(AnimeMock.getAnimeRecord());
 	}
 	
 	@Test

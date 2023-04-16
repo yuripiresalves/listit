@@ -1,6 +1,6 @@
 package br.com.listit.listit.findid.mock;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
+import br.com.listit.listit.web.dto.AnimeRecord;
 import net.sandrohc.jikan.model.anime.Anime;
 
 public class AnimeMock {
@@ -20,7 +20,7 @@ public class AnimeMock {
 		return anime;
 	}
 	
-	public static AnimeRecord getAnimeRocord() {
+	public static AnimeRecord getAnimeRecord() {
 		return AnimeRecord.builder()
 				.score(9.6)
 				.imageJPG(null)

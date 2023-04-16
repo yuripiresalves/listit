@@ -1,0 +1,45 @@
+
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: listit
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/listit
+    username: listit
+    password: qwe123
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  server:
+    port: 8080
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+    
+jwt:
+  secret: bXktMzItY2hhcmFjdGVyLXVsdHJhLXNlY3VyZS1hbmQtdWx0cmEtbG9uZy1zZWNyZXQ=
+  validate: 10800
+
+google:
+  id-cliente: 210340187221-oj81f7cet5ncc21mk6c70uoddqs6l76a.apps.googleusercontent.com
+
+
+
