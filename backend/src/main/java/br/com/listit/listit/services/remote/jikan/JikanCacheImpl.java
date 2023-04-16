@@ -18,7 +18,6 @@ public class JikanCacheImpl implements JikanCache {
 	
 	private JikanCacheImpl() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	private final Cache<String, JikanValueHolder> cache = Caffeine.newBuilder().maximumSize(10_000)
@@ -48,11 +47,11 @@ public class JikanCacheImpl implements JikanCache {
 		}
 
 		public long expireAfterUpdate(String key, JikanValueHolder value, long currentTime, long currentDuration) {
-			return currentDuration; // Do not modify expire date
+			return currentDuration;
 		}
 
 		public long expireAfterRead(String key, JikanValueHolder value, long currentTime, long currentDuration) {
-			return currentDuration; // Do not modify expire date
+			return currentDuration;
 		}
 	}
 }
