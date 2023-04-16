@@ -46,6 +46,8 @@ export default function AnimeDetails() {
 
         const favoritesAnimes = response.data[3].items;
 
+        //1 array com td mundo e 1 com td sem o favorito
+
         const isFavorite = favoritesAnimes.find((anime: Anime) => {
           return anime.id === Number(id);
         });

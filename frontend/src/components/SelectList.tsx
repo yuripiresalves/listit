@@ -22,6 +22,8 @@ export function SelectList({
       const response = await api.get('/lists/types');
       const data = await response.data;
 
+      console.log('fdsfdsafds', data);
+
       const [watching, finished, toWatch] = data;
       const types = [watching, finished, toWatch];
       setListTypes(types);

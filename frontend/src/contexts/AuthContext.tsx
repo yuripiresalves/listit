@@ -64,7 +64,7 @@ export function AuthProvider({ children }: any) {
     });
 
     setCookie(undefined, 'listit.token', data.token, {
-      maxAge: 60 * 60 * 1, // 1 hour
+      maxAge: 60 * 60 * 3, // 3 hour
     });
 
     api.defaults.headers['Authorization'] = `Bearer ${data.token}`;
@@ -80,7 +80,7 @@ export function AuthProvider({ children }: any) {
       });
 
       setCookie(undefined, 'listit.token', data.token, {
-        maxAge: 60 * 60 * 1, // 1 hour
+        maxAge: 60 * 60 * 3, // 3 hour
       });
 
       api.defaults.headers['Authorization'] = `Bearer ${data.token}`;

@@ -23,6 +23,8 @@ export default function Settings() {
   const [email, setEmail] = useState(user?.email);
   const [username, setUsername] = useState(user?.username);
   const [urlImage, setUrlImage] = useState(user?.urlImage);
+  const [password, setPassword] = useState('');
+
   // const [bio, setBio] = useState(user?.description);
 
   // async function handleViewProfile() {
@@ -44,6 +46,7 @@ export default function Settings() {
         username,
         description: bio,
         urlImage,
+        password,
       });
       toast('Perfil atualizado com sucesso', {
         type: 'success',
@@ -217,6 +220,18 @@ export default function Settings() {
                       rows={5}
                       className="rounded-md p-4 resize-none"
                     ></textarea>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label htmlFor="password">Alterar senha:</label>
+                    <input
+                      id="password"
+                      value={password}
+                      type="password"
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Digite sua nova senha"
+                      className="rounded-md p-4 resize-none"
+                    />
                   </div>
 
                   <button className="bg-emerald-600 text-zinc-100 font-bold p-4 rounded-md w-24 self-end hover:bg-emerald-700 transition-colors">

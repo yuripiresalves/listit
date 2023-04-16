@@ -2,8 +2,9 @@ import { Anime } from '@/pages';
 import { api } from '@/services/api';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FavoriteStar } from './FavoriteStar';
+import { AuthContext } from '@/contexts/AuthContext';
 
 interface AnimeCardProps {
   anime: Anime;
@@ -11,6 +12,7 @@ interface AnimeCardProps {
 
 export function AnimeCard({ anime }: AnimeCardProps) {
   const [isFavorite, setIsFavorite] = useState(false);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     async function getFavoriteAnimes() {
@@ -63,11 +65,13 @@ export function AnimeCard({ anime }: AnimeCardProps) {
             Ver mais
           </Link>
 
-          <FavoriteStar
-            id={anime.id}
-            isFavorite={isFavorite}
-            setIsFavorite={setIsFavorite}
-          />
+          {user && (
+            <FavoriteStar
+              id={anime.id}
+              isFavorite={isFavorite}
+              setIsFavorite={setIsFavorite}
+            />
+          )}
         </div>
       </div>
     </div>

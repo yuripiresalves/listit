@@ -180,11 +180,7 @@ export function Table({ listType }: TableProps) {
                             <AlertDialog.Title className="font-bold text-xl mb-2 text-rose-600">
                               Tem certeza?
                             </AlertDialog.Title>
-                            {/* <AlertDialog.Description className="text-zinc-500">
-                            Essa ação não poderá ser desfeita. Isso irá excluir
-                            sua conta permanentemente e remover seus dados de
-                            nossos servidores.
-                          </AlertDialog.Description> */}
+
                             <div className="flex gap-6 justify-end mt-4">
                               <AlertDialog.Cancel asChild>
                                 <button className="flex justify-center items-center px-4 py-2 font-bold bg-zinc-200 rounded-md">
@@ -218,14 +214,3 @@ export function Table({ listType }: TableProps) {
     </>
   );
 }
-
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const response = await fetch('http://localhost:3333/animes');
-//   const animes = await response.json();
-
-//   return {
-//     props: {
-//       animes,
-//     },
-//   };
-// };

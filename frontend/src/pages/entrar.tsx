@@ -19,7 +19,7 @@ export default function Login() {
       await signInWithCredentials(data);
     } catch (error) {
       console.log(error);
-      toast('Email ou senha incorretos', {
+      toast('Nome de usuário ou senha incorretos', {
         type: 'error',
         position: 'top-right',
         autoClose: 5000,
