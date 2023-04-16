@@ -3,7 +3,7 @@ package br.com.listit.listit.findanimebytitle.mock;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
+import br.com.listit.listit.web.dto.AnimeRecord;
 import net.sandrohc.jikan.model.anime.Anime;
 
 public class AnimeListMock {

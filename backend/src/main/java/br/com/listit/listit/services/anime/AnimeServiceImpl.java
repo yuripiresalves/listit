@@ -5,8 +5,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import br.com.listit.listit.domain.dto.AnimeRecord;
-import br.com.listit.listit.domain.dto.ImageJPG;
 import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
 import br.com.listit.listit.services.remote.jikan.ClientRemoteApiJikan;
 import lombok.AllArgsConstructor;
