@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.listit.listit.domain.entity.User;
+import br.com.listit.listit.exception.OperationException;
 import br.com.listit.listit.exception.UserNotFoundException;
 import br.com.listit.listit.repository.UserRepository;
 import br.com.listit.listit.web.dto.UserAllFieldsDTO;
@@ -79,6 +80,10 @@ public class UserServiceImpl implements UserService {
 		Optional<User> userCurrent = getUserCurrent();
 		User user = extratUserOrThrowException(userCurrent);
 		
+		if(password == null || password.equals("")) {
+			throw new OperationException("password is empty");
+		}
+		
 		user.setPassword(passwordEncoder.encode(password));
 		
 		userRepository.save(user);
@@ -102,6 +107,10 @@ public class UserServiceImpl implements UserService {
 		User userToUpdated = convertUserDtoToUserEntity(userDTO);
 		
 		userToUpdated.setId(user.getId());
+		
+		if(userDTO.getPassword()==null || userDTO.getPassword().equals("")) {
+			userToUpdated.setPassword(user.getPassword());;
+		}
 		
 		userRepository.save(userToUpdated);
 	}
