@@ -23,7 +23,6 @@ import br.com.listit.listit.domain.entity.User;
 import br.com.listit.listit.exception.OperationException;
 import br.com.listit.listit.repository.ListAnimeEntityRepository;
 import br.com.listit.listit.services.anime.AnimeService;
-import br.com.listit.listit.services.anime.ListAnimeEntityService;
 import br.com.listit.listit.services.anime.ListAnimeEntityServiceImpl;
 import br.com.listit.listit.services.remote.exceptions.BadRequestClientServiceException;
 import br.com.listit.listit.services.user.UserService;
@@ -34,8 +33,6 @@ class AddItemTest {
 	
 	@Mock
 	private ListAnimeEntityRepository listAnimeEntityRepository;
-	
-	private ListAnimeEntityService listAnimeEntityService;
 	
 	@Test
 	void when_listNotFound() {
