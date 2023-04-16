@@ -38,7 +38,7 @@ springdoc:
     
 jwt:
   secret: bXktMzItY2hhcmFjdGVyLXVsdHJhLXNlY3VyZS1hbmQtdWx0cmEtbG9uZy1zZWNyZXQ=
-  validate: 1800
+  validate: 10800
 
 google:
   id-cliente: 210340187221-oj81f7cet5ncc21mk6c70uoddqs6l76a.apps.googleusercontent.com

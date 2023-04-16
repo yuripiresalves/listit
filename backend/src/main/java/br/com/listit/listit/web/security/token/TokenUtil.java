@@ -22,7 +22,7 @@ import io.jsonwebtoken.security.SignatureException;
 public class TokenUtil implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private static final long JWT_TOKEN_VALIDITY = 1800l;
+	private static final long JWT_TOKEN_VALIDITY = 60l * 60l * 3l;
 
 	private static final String secret = "bXktMzItY2hhcmFjdGVyLXVsdHJhLXNlY3VyZS1hbmQtdWx0cmEtbG9uZy1zZWNyZXQ=";
 
