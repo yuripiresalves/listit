@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.listit.listit.domain.entity.ListAnimeEntity;
 
-@Repository
 public interface ListAnimeEntityRepository extends JpaRepository<ListAnimeEntity, Integer>{
 
 }

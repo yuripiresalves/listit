@@ -1,14 +1,16 @@
 import Head from 'next/head';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
+import { api } from '@/services/api';
+import { MagnifyingGlass, X } from 'phosphor-react';
+import * as Tabs from '@radix-ui/react-tabs';
 
+import { Header } from '@/components/Header';
 import { GridContainer } from '@/components/GridContainer';
 import { AnimeCard } from '@/components/AnimeCard';
 import { Table } from '@/components/Table';
-import * as Tabs from '@radix-ui/react-tabs';
-import { api } from '@/services/api';
-import { MagnifyingGlass, X } from 'phosphor-react';
 import { Loading } from '@/components/Loading';
 import { AnimeNotFound } from '@/components/AnimeNotFound';
+import { AuthContext } from '@/contexts/AuthContext';
 
 export type Anime = {
   id: number;
@@ -26,6 +28,7 @@ export default function Home() {
   const [animes, setAnimes] = useState<Anime[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const { user } = useContext(AuthContext);
 
   async function handleSearchAnime(event: FormEvent) {
     event.preventDefault();
@@ -37,7 +40,7 @@ export default function Home() {
     try {
       setHasError(false);
       setIsLoading(true);
-      const response = await api.get(`/findByName/${animeName}`);
+      const response = await api.get(`/animes/findByName/${animeName}`);
       const data = await response.data;
       setAnimes(data);
     } catch (error) {
@@ -59,40 +62,45 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="bg-emerald-800 2xl:h-96 h-64 flex items-center justify-center px-4">
-        <div className="max-w-[512px] flex flex-col items-center justify-center">
-          <p className="text-zinc-300 mb-6 w-full text-center font-bold ">
+
+      <Header />
+
+      <section className="bg-emerald-800 h-64 flex items-center justify-center px-4">
+        <div className="text-center">
+          <h1 className="text-zinc-300 mb-6 w-full text-center font-bold text-xl">
             Pesquise entre milhares de animes disponíveis em nosso catálogo
-          </p>
-          <form onSubmit={handleSearchAnime} className="w-full flex gap-3">
-            <input
-              type="text"
-              placeholder="Pesquisar anime"
-              className="p-4 rounded-md bg-zinc-200 w-full"
-              value={animeName}
-              onChange={(e) => setAnimeName(e.target.value)}
-            />
-            <button className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all">
-              <MagnifyingGlass size={24} className="text-emerald-800" />
-            </button>
-            {animes.length > 0 && (
-              <button
-                className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all"
-                onClick={() => {
-                  setAnimeName('');
-                  setAnimes([]);
-                }}
-              >
-                <X size={24} className="text-red-600" />
+          </h1>
+          <div className="max-w-[512px] flex flex-col items-center justify-center m-auto">
+            <form onSubmit={handleSearchAnime} className="w-full flex gap-3">
+              <input
+                type="text"
+                placeholder="Pesquisar anime"
+                className="p-4 rounded-md bg-zinc-200 w-full"
+                value={animeName}
+                onChange={(e) => setAnimeName(e.target.value)}
+              />
+              <button className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all">
+                <MagnifyingGlass size={24} className="text-emerald-800" />
               </button>
-            )}
-          </form>
-          <span className="text-zinc-300 mt-2 text-left self-start text-sm">
-            Sugestões: Shingeki no Kyojin, Death Note, Naruto
-          </span>
+              {animes.length > 0 && (
+                <button
+                  className="bg-zinc-200 px-4 rounded-lg hover:bg-zinc-300 transition-all"
+                  onClick={() => {
+                    setAnimeName('');
+                    setAnimes([]);
+                  }}
+                >
+                  <X size={24} className="text-red-600" />
+                </button>
+              )}
+            </form>
+            <span className="text-zinc-300 mt-2 text-left self-start text-sm">
+              Sugestões: Shingeki no Kyojin, Death Note, Naruto
+            </span>
+          </div>
         </div>
       </section>
-      <section className="py-10">
+      <section className="py-7">
         {/* {hasError && <AnimeNotFound />} */}
         {isLoading ? (
           <GridContainer>
@@ -113,7 +121,7 @@ export default function Home() {
               ))}
             </div>
           </GridContainer>
-        ) : (
+        ) : user ? (
           <GridContainer>
             <h2 className="text-2xl font-bold text-emerald-700 mb-8">
               Minhas listas
@@ -172,21 +180,30 @@ export default function Home() {
                 </Tabs.List>
               </div>
               <Tabs.Content value="all">
-                <Table />
+                <Table listType="" />
               </Tabs.Content>
               <Tabs.Content value="watching">
-                <Table />
+                <Table listType="ASSISTINDO" />
               </Tabs.Content>
               <Tabs.Content value="finished">
-                <Table />
+                <Table listType="FINALIZADO" />
               </Tabs.Content>
               <Tabs.Content value="toWatch">
-                <Table />
+                <Table listType="PARA_ASSISTIR" />
               </Tabs.Content>
               <Tabs.Content value="favorites">
-                <Table />
+                <Table listType="FAVORITO" />
               </Tabs.Content>
             </Tabs.Root>
+          </GridContainer>
+        ) : (
+          <GridContainer>
+            <h2 className="text-2xl font-bold text-emerald-700 mb-8">
+              Minhas listas
+            </h2>
+            <p className="text-zinc-500">
+              Você precisa estar logado para ver suas listas
+            </p>
           </GridContainer>
         )}
       </section>
